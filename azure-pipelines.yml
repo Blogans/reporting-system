@@ -80,30 +80,6 @@ stages:
         ArtifactName: 'drop'
         publishLocation: 'Container'
 
-- stage: DeployToStaging
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-  jobs:
-  - deployment: DeployToStaging
-    pool:
-      vmImage: ubuntu-latest
-    environment: 'staging'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: DownloadBuildArtifacts@0
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'drop'
-              downloadPath: '$(System.ArtifactsDirectory)'
-          
-          - task: AzureWebApp@1
-            inputs:
-              azureSubscription: 'reporting-system'
-              appName: 'reporting-system'
-              package: '$(System.ArtifactsDirectory)/**/*.zip'
-
 - stage: DeployToProduction
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
   jobs:
@@ -124,6 +100,6 @@ stages:
           
           - task: AzureWebApp@1
             inputs:
-              azureSubscription: 'reporting-system'
-              appName: 'reporting-system'
+              azureSubscription: 'incident-reporting-system'
+              appName: 'incident-report-system'
               package: '$(System.ArtifactsDirectory)/**/*.zip'
