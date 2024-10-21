@@ -102,3 +102,4 @@ stages:
               azureSubscription: 'incident-reporting-system'
               appName: 'incident-report-system'
               package: '$(System.ArtifactsDirectory)/**/*.zip'
+              deploymentMethod: zipDeploy
