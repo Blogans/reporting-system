@@ -74,6 +74,7 @@ stages:
               downloadPath: '$(System.ArtifactsDirectory)'
           
           - task: AzureWebApp@1
+            timeoutInMinutes: 10
             inputs:
               appType: webAppLinux
               azureSubscription: 'incident-reporting-system'
