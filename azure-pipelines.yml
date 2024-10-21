@@ -50,9 +50,13 @@ stages:
       condition: always()
 
     - script: |
-        du -sh $(System.DefaultWorkingDirectory)/*
-        ls -la $(System.DefaultWorkingDirectory)
-      displayName: 'Debug: List directory contents'
+        echo "Removing unnecessary directories..."
+        rm -rf .git
+        rm -rf node_modules
+        rm -rf coverage
+        echo "Directories removed. Current contents:"
+        ls -la
+      displayName: 'Remove unnecessary directories'
 
     - task: ArchiveFiles@2
       inputs:
@@ -61,15 +65,12 @@ stages:
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip' 
         replaceExistingArchive: true
-        verbose: true
-        exclude: |
-          **/.git/**
-          **/node_modules/**
-          **/coverage/**
-      timeoutInMinutes: 10
+      displayName: 'Archive Files'
 
     - script: |
+        echo "Archive created. Contents:"
         ls -la $(Build.ArtifactStagingDirectory)
+        echo "Archive size:"
         du -sh $(Build.ArtifactStagingDirectory)/*
       displayName: 'Debug: Check artifact'
 
