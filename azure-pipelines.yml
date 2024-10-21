@@ -101,7 +101,7 @@ stages:
           - task: AzureWebApp@1
             inputs:
               azureSubscription: 'incident-reporting-system'
-              appName: 'incident-reporting-system'
+              appName: 'incident-report-system'
               package: '$(System.ArtifactsDirectory)/**/*.zip'
 
 - stage: DeployToProduction
@@ -125,5 +125,5 @@ stages:
           - task: AzureWebApp@1
             inputs:
               azureSubscription: 'incident-reporting-system'
-              appName: 'incident-reporting-system'
+              appName: 'incident-report-system'
               package: '$(System.ArtifactsDirectory)/**/*.zip'
