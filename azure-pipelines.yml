@@ -15,7 +15,8 @@ stages:
       displayName: "Install Node.js"
 
     - script: |
-        npm install
+        npm install -g typescript
+        npm ci
         npm run build
       displayName: "npm install and build"
 
@@ -103,5 +104,4 @@ stages:
               azureSubscription: 'incident-reporting-system'
               appType: webAppLinux
               appName: 'incident-report-system'
-              startUpCommand: "npm install -g typescript"
               package: '$(System.ArtifactsDirectory)/**/*.zip'
