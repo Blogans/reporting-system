@@ -103,5 +103,6 @@ stages:
             inputs:
               azureSubscription: 'incident-reporting-system'
               appType: webAppLinux
+              startUpCommand: "npm install && npm run build && npm run serve"
               appName: 'incident-report-system'
               package: '$(System.ArtifactsDirectory)/**/*.zip'
