@@ -24,40 +24,6 @@ stages:
       displayName: "Run tests"
       continueOnError: true
 
-    - task: PublishTestResults@2
-      displayName: "Publish test results"
-      inputs:
-        testResultsFormat: "JUnit"
-        testResultsFiles: "junit.xml"
-        mergeTestResults: true
-        failTaskOnFailedTests: false
-      condition: succeededOrFailed()
-
-    - task: PublishCodeCoverageResults@2
-      displayName: "Publish code coverage"
-      inputs:
-        codeCoverageTool: "Cobertura"
-        summaryFileLocation: "$(Build.SourcesDirectory)/coverage/cobertura-coverage.xml"
-        pathToSources: "$(Build.SourcesDirectory)"
-        failIfCoverageEmpty: false
-      condition: succeededOrFailed()
-
-    - script: |
-        if [ $AGENT_JOBSTATUS == "Failed" ]; then
-          exit 1
-        fi
-      displayName: 'Check for test failures'
-      condition: always()
-
-    - script: |
-        echo "Removing unnecessary directories..."
-        rm -rf .git
-        rm -rf node_modules
-        rm -rf coverage
-        echo "Directories removed. Current contents:"
-        ls -la
-      displayName: 'Remove unnecessary directories'
-
     - task: ArchiveFiles@2
       inputs:
         rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
