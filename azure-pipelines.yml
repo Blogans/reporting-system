@@ -1,46 +1,129 @@
 trigger:
   - dev
+  - main
 
-pool:
-  vmImage: ubuntu-latest
+stages:
+- stage: Build
+  jobs:
+  - job: BuildAndTest
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: "20.x"
+      displayName: "Install Node.js"
 
-steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: "20.x"
-    displayName: "Install Node.js"
+    - script: |
+        npm install
+        npm run build
+      displayName: "npm install and build"
 
-  - script: |
-      npm install
-      npm run build
-    displayName: "npm install and build"
+    - script: |
+        npm run test:ci
+      displayName: "Run tests"
+      continueOnError: true
 
-  - script: |
-      npm run test:ci
-    displayName: "Run tests"
-    continueOnError: true
+    - task: PublishTestResults@2
+      displayName: "Publish test results"
+      inputs:
+        testResultsFormat: "JUnit"
+        testResultsFiles: "junit.xml"
+        mergeTestResults: true
+        failTaskOnFailedTests: false
+      condition: succeededOrFailed()
 
-  - task: PublishTestResults@2
-    displayName: "Publish test results"
-    inputs:
-      testResultsFormat: "JUnit"
-      testResultsFiles: "junit.xml"
-      mergeTestResults: true
-      failTaskOnFailedTests: false
-    condition: succeededOrFailed()
+    - task: PublishCodeCoverageResults@2
+      displayName: "Publish code coverage"
+      inputs:
+        codeCoverageTool: "Cobertura"
+        summaryFileLocation: "$(Build.SourcesDirectory)/coverage/cobertura-coverage.xml"
+        pathToSources: "$(Build.SourcesDirectory)"
+        failIfCoverageEmpty: false
+      condition: succeededOrFailed()
 
-  - task: PublishCodeCoverageResults@2
-    displayName: "Publish code coverage"
-    inputs:
-      codeCoverageTool: "Cobertura"
-      summaryFileLocation: "$(Build.SourcesDirectory)/coverage/cobertura-coverage.xml"
-      pathToSources: "$(Build.SourcesDirectory)"
-      failIfCoverageEmpty: false
-    condition: succeededOrFailed()
+    - script: |
+        if [ $AGENT_JOBSTATUS == "Failed" ]; then
+          exit 1
+        fi
+      displayName: 'Check for test failures'
+      condition: always()
 
-  - script: |
-      if [ $AGENT_JOBSTATUS == "Failed" ]; then
-        exit 1
-      fi
-    displayName: 'Check for test failures'
-    condition: always()
+    - script: |
+        echo "Removing unnecessary directories..."
+        rm -rf .git
+        rm -rf node_modules
+        rm -rf coverage
+        echo "Directories removed. Current contents:"
+        ls -la
+      displayName: 'Remove unnecessary directories'
+
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip' 
+        replaceExistingArchive: true
+      displayName: 'Archive Files'
+
+    - script: |
+        echo "Archive created. Contents:"
+        ls -la $(Build.ArtifactStagingDirectory)
+        echo "Archive size:"
+        du -sh $(Build.ArtifactStagingDirectory)/*
+      displayName: 'Debug: Check artifact'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
+- stage: DeployToStaging
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  jobs:
+  - deployment: DeployToStaging
+    pool:
+      vmImage: ubuntu-latest
+    environment: 'staging'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'drop'
+              downloadPath: '$(System.ArtifactsDirectory)'
+          
+          - task: AzureWebApp@1
+            inputs:
+              azureSubscription: 'reporting-system'
+              appName: 'reporting-system'
+              package: '$(System.ArtifactsDirectory)/**/*.zip'
+
+- stage: DeployToProduction
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  jobs:
+  - deployment: DeployToProduction
+    pool:
+      vmImage: ubuntu-latest
+    environment: 'production'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'drop'
+              downloadPath: '$(System.ArtifactsDirectory)'
+          
+          - task: AzureWebApp@1
+            inputs:
+              azureSubscription: 'reporting-system'
+              appName: 'reporting-system'
+              package: '$(System.ArtifactsDirectory)/**/*.zip'
