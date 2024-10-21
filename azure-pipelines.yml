@@ -101,5 +101,7 @@ stages:
           - task: AzureWebApp@1
             inputs:
               azureSubscription: 'incident-reporting-system'
+              appType: webAppLinux
               appName: 'incident-report-system'
+              startUpCommand: "npm install -g typescript"
               package: '$(System.ArtifactsDirectory)/**/*.zip'
