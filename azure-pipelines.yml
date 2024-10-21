@@ -24,6 +24,15 @@ stages:
       displayName: "Run tests"
       continueOnError: true
 
+    - script: |
+        echo "Removing unnecessary directories..."
+        rm -rf .git
+        rm -rf node_modules
+        rm -rf coverage
+        echo "Directories removed. Current contents:"
+        ls -la
+      displayName: 'Remove unnecessary directories'
+
     - task: ArchiveFiles@2
       inputs:
         rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
