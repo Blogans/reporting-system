@@ -49,6 +49,11 @@ stages:
       displayName: 'Check for test failures'
       condition: always()
 
+    - script: |
+        du -sh $(System.DefaultWorkingDirectory)/*
+        ls -la $(System.DefaultWorkingDirectory)
+      displayName: 'Debug: List directory contents'
+
     - task: ArchiveFiles@2
       inputs:
         rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
@@ -56,6 +61,17 @@ stages:
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip' 
         replaceExistingArchive: true
+        verbose: true
+        exclude: |
+          **/.git/**
+          **/node_modules/**
+          **/coverage/**
+      timeoutInMinutes: 10
+
+    - script: |
+        ls -la $(Build.ArtifactStagingDirectory)
+        du -sh $(Build.ArtifactStagingDirectory)/*
+      displayName: 'Debug: Check artifact'
 
     - task: PublishBuildArtifacts@1
       inputs:
