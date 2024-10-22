@@ -29,22 +29,6 @@ stages:
         echo "Copying files to dist..."
         cp web.config dist/
         cp package.json dist/
-        cp -r node_modules dist/
-        echo "Removing unnecessary files from node_modules..."
-        cd dist/node_modules
-        find . -name "*.md" -type f -delete
-        find . -name "*.txt" -type f -delete
-        find . -name "*.map" -type f -delete
-        find . -name "LICENSE" -type f -delete
-        find . -name "*.ts" -type f -delete
-        find . -type d -name "test" -exec rm -rf {} +
-        find . -type d -name "tests" -exec rm -rf {} +
-        find . -type d -name "docs" -exec rm -rf {} +
-        find . -type d -name "example" -exec rm -rf {} +
-        find . -type d -name "examples" -exec rm -rf {} +
-        cd ../..
-        echo "Contents of dist directory:"
-        ls -la dist/
       displayName: 'Build and prepare dist'
 
     - task: ArchiveFiles@2
@@ -74,20 +58,39 @@ stages:
       runOnce:
         deploy:
           steps:
+          - script: |
+              echo "Current directory structure before download:"
+              pwd
+              ls -la
+              echo "System.ArtifactsDirectory: $(System.ArtifactsDirectory)"
+              echo "Build.ArtifactStagingDirectory: $(Build.ArtifactStagingDirectory)"
+            displayName: 'Debug: Pre-download check'
+
           - task: DownloadBuildArtifacts@0
             inputs:
               buildType: 'current'
               downloadType: 'single'
               artifactName: 'drop'
               downloadPath: '$(System.ArtifactsDirectory)'
-          
+         
+          - script: |
+              echo "Checking downloaded artifacts:"
+              ls -la $(System.ArtifactsDirectory)
+              echo "Checking drop directory:"
+              ls -la $(System.ArtifactsDirectory)/drop
+              echo "Looking for zip files:"
+              find $(System.ArtifactsDirectory) -name "*.zip"
+              echo "Full directory tree:"
+              tree $(System.ArtifactsDirectory)
+            displayName: 'Debug: Post-download check'
+
           - task: AzureWebApp@1
             timeoutInMinutes: 10
             inputs:
               appType: webAppLinux
               azureSubscription: 'incident-reporting-system'
               appName: 'incident-report-system'
-              package: '$(System.ArtifactStagingDirectory)/drop/*.zip'
+              package: '$(System.ArtifactsDirectory)/drop/*.zip'
               appSettings: |
                 NODE_ENV=production
                 WEBSITE_NODE_DEFAULT_VERSION=20.x
