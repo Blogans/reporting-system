@@ -4,13 +4,12 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "start": "npm run serve",
+    "start": "tsx server/index.ts",
     "dev": "concurrently \"npm run server\" \"npm run startclient\"",
     "startclient": "vite",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:ci": "node --experimental-vm-modules node_modules/jest/bin/jest.js --ci --coverage",
     "build": "tsc && vite build",
-    "serve": "tsx server/index.ts",
     "server": "nodemon --watch \"server/**/*.ts\" --exec \"tsx\" server/index.ts"
   },
   "dependencies": {
