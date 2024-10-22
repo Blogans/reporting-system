@@ -13,15 +13,13 @@ import warningsRoutes from './routes/warning.route.js';
 import bansRoutes from './routes/ban.route.js';
 import dashboardRoutes from './routes/dashboard.route.js';
 import reportRoutes from './routes/report.route.js';
-import { fileURLToPath } from 'url';
 import path from 'path';
 import databaseSeeder from './utils/databaseSeeder.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Replace import.meta.url with __dirname
+const _dirname = path.resolve();
 
 dotenv.config();
-
 const app = express();
 const PORT = process.env.PORT || 8080;
 
@@ -47,7 +45,7 @@ app.use(session({
 }));
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, '..')));
+app.use(express.static(path.join(_dirname, '..')));
 
 // API routes
 app.use('/api/auth', authRoutes);
@@ -63,7 +61,7 @@ app.use('/api/reports', reportRoutes);
 
 // Catch-all route for client-side routing
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../index.html'));
+  res.sendFile(path.join(_dirname, '../index.html'));
 });
 
 async function connectToDatabase() {
@@ -83,10 +81,11 @@ async function startServer() {
   });
 }
 
-// Check if this file is being run directly
-if (path.resolve(__filename) === path.resolve(process.argv[1])) {
-  startServer();
-  await databaseSeeder();
+// Change the startup logic to avoid top-level await
+if (require.main === module) {
+  startServer().then(() => {
+    return databaseSeeder();
+  }).catch(console.error);
 }
 
 export { app, startServer, connectToDatabase };
