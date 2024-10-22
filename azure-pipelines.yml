@@ -29,6 +29,19 @@ stages:
         echo "Copying files to dist..."
         cp web.config dist/
         cp package.json dist/
+        cp -r node_modules dist/
+        echo "Removing unnecessary files from node_modules..."
+        cd dist/node_modules
+        find . -name "*.md" -type f -delete
+        find . -name "*.txt" -type f -delete
+        find . -name "*.map" -type f -delete
+        find . -name "LICENSE" -type f -delete
+        find . -name "*.ts" -type f -delete
+        find . -type d -name "test" -exec rm -rf {} +
+        find . -type d -name "tests" -exec rm -rf {} +
+        find . -type d -name "docs" -exec rm -rf {} +
+        find . -type d -name "example" -exec rm -rf {} +
+        find . -type d -name "examples" -exec rm -rf {} +
       displayName: 'Build and prepare dist'
 
     - task: ArchiveFiles@2
