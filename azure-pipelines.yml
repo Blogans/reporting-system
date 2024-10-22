@@ -85,4 +85,3 @@ stages:
               appSettings: |
                 -NODE_ENV=production
                 -WEBSITE_NODE_DEFAULT_VERSION=20.x
-                -WEBSITE_RUN_FROM_PACKAGE=1
