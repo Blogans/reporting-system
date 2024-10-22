@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
-    "start": "node server/index.js",
+    "start": "node dist/server/index.js",
     "dev": "concurrently \"npm run server\" \"npm run startclient\"",
     "startclient": "vite",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
