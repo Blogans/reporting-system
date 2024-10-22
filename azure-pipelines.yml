@@ -47,21 +47,6 @@ stages:
         ArtifactName: 'drop'
         publishLocation: 'Container'
 
-    - script: |
-        echo "Current directory structure before download:"
-        pwd
-        ls -la
-        echo "System.ArtifactsDirectory: $(System.ArtifactsDirectory)"
-        echo "Build.ArtifactStagingDirectory: $(Build.ArtifactStagingDirectory)"
-      displayName: 'Debug: Pre-download check'
-
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'drop'
-        downloadPath: '$(System.ArtifactsDirectory)'
-
 - stage: DeployToStaging
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
   jobs:
@@ -72,7 +57,22 @@ stages:
     strategy:
       runOnce:
         deploy:
-          steps:         
+          steps:
+          - script: |
+              echo "Current directory structure before download:"
+              pwd
+              ls -la
+              echo "System.ArtifactsDirectory: $(System.ArtifactsDirectory)"
+              echo "Build.ArtifactStagingDirectory: $(Build.ArtifactStagingDirectory)"
+            displayName: 'Debug: Pre-download check'
+
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'drop'
+              downloadPath: '$(System.ArtifactsDirectory)'
+         
           - script: |
               echo "Checking downloaded artifacts:"
               ls -la $(System.ArtifactsDirectory)
@@ -85,7 +85,7 @@ stages:
             displayName: 'Debug: Post-download check'
 
           - task: AzureWebApp@1
-            timeoutInMinutes: 12
+            timeoutInMinutes: 10
             inputs:
               appType: webAppLinux
               azureSubscription: 'incident-reporting-system'
