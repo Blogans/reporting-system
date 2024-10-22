@@ -26,11 +26,13 @@ stages:
     - script: |
         echo "Building application..."
         npm run build
-        echo "Copying web.config and package.json to dist..."
+        echo "Copying configuration files to dist..."
         cp web.config dist/
-        cp package.json dist/ # Copy package.json to dist
-        echo "Contents of dist directory after copy:"
-        ls -la dist/ # Check contents after copying
+        cp package.json dist/
+        echo "Creating install script..."
+        cp install.js dist/
+        echo "Contents of dist directory:"
+        ls -la dist/
       displayName: 'Build and prepare dist'
 
     - task: ArchiveFiles@2
