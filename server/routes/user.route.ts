@@ -1,7 +1,7 @@
 import express from 'express';
-import * as userController from '../controllers/user.controller';
-import * as authController from '../controllers/auth.controller';
-import { checkPermission } from '../middleware/authMiddleware';
+import * as userController from '../controllers/user.controller.js';
+import * as authController from '../controllers/auth.controller.js';
+import { checkPermission } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { VenueModel, ContactModel, UserModel } from '../models';
+import { VenueModel, ContactModel, UserModel } from '../models/models.js';
 import mongoose, { Types } from 'mongoose';
-import { IVenue } from '../models/index.js';
+import { IVenue } from '../models/models.js';
 
 export async function getVenuesForUser(userId: string) {
   const user = await UserModel.findById(userId);

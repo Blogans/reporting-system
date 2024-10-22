@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app, connectToDatabase } from '../../server/index';
 import mongoose from 'mongoose';
-import { UserModel, VenueModel, ContactModel, OffenderModel, IncidentModel, WarningModel, BanModel } from '../../server/models';
+import { UserModel, VenueModel, ContactModel, OffenderModel, IncidentModel, WarningModel, BanModel } from '../../server/models/models';
 
 describe('Incident Reporting System Tests', () => {
   let adminCookie: string;

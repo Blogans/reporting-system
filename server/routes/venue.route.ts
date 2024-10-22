@@ -1,6 +1,6 @@
 import express from 'express';
-import * as venueController from '../controllers/venue.controller';
-import { checkPermission } from '../middleware/authMiddleware';
+import * as venueController from '../controllers/venue.controller.js';
+import { checkPermission } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 

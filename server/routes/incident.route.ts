@@ -1,6 +1,6 @@
 import express from 'express';
-import { checkPermission } from '../middleware/authMiddleware';
-import * as incidentController from '../controllers/incident.controller';
+import { checkPermission } from '../middleware/authMiddleware.js';
+import * as incidentController from '../controllers/incident.controller.js';
 
 const router = express.Router();
 

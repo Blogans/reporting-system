@@ -17,13 +17,11 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "outDir": "./dist",
-    "rootDir": ".",
     "baseUrl": ".",
     "paths": {
-      "server/*": ["server/*"],
       "src/*": ["src/*"]
-    },
+    }
   },
-  "include": ["src", "server", "tests"],
+  "include": ["src", "tests"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,5 +1,5 @@
 import express from 'express';
-import { checkPermission } from '../middleware/authMiddleware';
+import { checkPermission } from '../middleware/authMiddleware.js';
 import {
   getAllBans,
   createBan,
@@ -7,7 +7,7 @@ import {
   updateBan,
   deleteBan,
   getBansForOffender
-} from '../controllers/ban.controller';
+} from '../controllers/ban.controller.js';
 
 const router = express.Router();
 

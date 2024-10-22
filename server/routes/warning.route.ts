@@ -1,5 +1,5 @@
 import express from 'express';
-import { checkPermission } from '../middleware/authMiddleware';
+import { checkPermission } from '../middleware/authMiddleware.js';
 import {
   getAllWarnings,
   createWarning,
@@ -7,7 +7,7 @@ import {
   updateWarning,
   deleteWarning,
   getWarningsForOffender
-} from '../controllers/warning.controller';
+} from '../controllers/warning.controller.js';
 
 const router = express.Router();
 

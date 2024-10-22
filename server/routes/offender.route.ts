@@ -1,6 +1,6 @@
 import express from 'express';
-import { checkPermission } from '../middleware/authMiddleware';
-import * as offenderController from '../controllers/offender.controller';
+import { checkPermission } from '../middleware/authMiddleware.js';
+import * as offenderController from '../controllers/offender.controller.js';
 
 const router = express.Router();
 

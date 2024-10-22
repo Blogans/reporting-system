@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { ContactModel, VenueModel, UserModel } from '../models';
+import { ContactModel, VenueModel, UserModel } from '../models/models.js';
 import { Types } from 'mongoose';
-import { IContact } from '../models/index.js';
+import { IContact } from '../models/models.js';
 import { getVenuesForUser } from './venue.controller.js';
 
 async function getContactsForUser(userId: string): Promise<IContact[]> {

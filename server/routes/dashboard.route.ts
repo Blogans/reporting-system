@@ -1,5 +1,5 @@
 import express from 'express';
-import { getRecentIncidents, getRecentWarnings, getRecentBans, getDashboardStats } from '../controllers/dashboard.controller';
+import { getRecentIncidents, getRecentWarnings, getRecentBans, getDashboardStats } from '../controllers/dashboard.controller.js';
 
 const router = express.Router();
 

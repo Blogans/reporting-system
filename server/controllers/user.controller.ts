@@ -1,5 +1,5 @@
 import express from 'express';
-import { UserModel } from 'server/models';
+import { UserModel } from '../models/models.js';
 import { getVenuesForUser } from './venue.controller.js';
 import { ObjectId } from 'mongodb';
 

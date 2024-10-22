@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { UserModel, VenueModel, IncidentModel, WarningModel, BanModel } from '../models';
+import { UserModel, VenueModel, IncidentModel, WarningModel, BanModel } from '../models/models.js';
 import mongoose from 'mongoose';
 
 export const getRecentIncidents = async (req: Request, res: Response) => {

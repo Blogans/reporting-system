@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { IncidentModel, VenueModel, UserModel, WarningModel, BanModel } from '../models';
+import { IncidentModel, VenueModel, UserModel, WarningModel, BanModel } from '../models/models.js';
 import mongoose, { Types } from 'mongoose';
-import { IIncident } from '../models/index.js';
+import { IIncident } from '../models/models.js';
 
 
 export async function getIncidentsForUser(userId: string) {

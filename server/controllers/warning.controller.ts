@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { WarningModel, OffenderModel, UserModel, IncidentModel } from '../models';
-import { IWarning } from '../models/index.js';
+import { WarningModel, OffenderModel, UserModel, IncidentModel } from '../models/models.js';
+import { IWarning } from '../models/models.js';
 
 export async function getWarningsForUser(userId: string) {
   const user = await UserModel.findById(userId);

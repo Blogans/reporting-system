@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { hasPermission, PERMISSIONS } from '../utils/permissions';
+import { hasPermission, PERMISSIONS } from '../utils/permissions.js';
 
 export const checkPermission = (permission: keyof typeof PERMISSIONS) => {
   return (req: Request, res: Response, next: NextFunction) => {

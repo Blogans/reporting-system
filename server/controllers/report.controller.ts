@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { IncidentModel, VenueModel, UserModel } from '../models';
+import { IncidentModel, VenueModel, UserModel } from '../models/models.js';
 import { rmSync } from 'fs';
 
 export const generateIncidentReport = async (req: Request, res: Response) => {

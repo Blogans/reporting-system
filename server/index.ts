@@ -3,19 +3,19 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import session from 'express-session';
-import authRoutes from './routes/auth.route';
-import venueRoutes from './routes/venue.route';
-import contactRoutes from './routes/contact.route';
-import offenderRoutes from './routes/offender.route';
-import userRoutes from './routes/user.route';
-import incidentRoutes from './routes/incident.route';
-import warningsRoutes from './routes/warning.route';
-import bansRoutes from './routes/ban.route';
-import dashboardRoutes from './routes/dashboard.route';
-import reportRoutes from './routes/report.route';
+import authRoutes from './routes/auth.route.js';
+import venueRoutes from './routes/venue.route.js';
+import contactRoutes from './routes/contact.route.js';
+import offenderRoutes from './routes/offender.route.js';
+import userRoutes from './routes/user.route.js';
+import incidentRoutes from './routes/incident.route.js';
+import warningsRoutes from './routes/warning.route.js';
+import bansRoutes from './routes/ban.route.js';
+import dashboardRoutes from './routes/dashboard.route.js';
+import reportRoutes from './routes/report.route.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
-import databaseSeeder from './utils/databaseSeeder';
+import databaseSeeder from './utils/databaseSeeder.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -47,7 +47,7 @@ app.use(session({
 }));
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../dist')));
+app.use(express.static(path.join(__dirname, '..')));
 
 // API routes
 app.use('/api/auth', authRoutes);
@@ -63,7 +63,7 @@ app.use('/api/reports', reportRoutes);
 
 // Catch-all route for client-side routing
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/index.html'));
+  res.sendFile(path.join(__dirname, '../index.html'));
 });
 
 async function connectToDatabase() {

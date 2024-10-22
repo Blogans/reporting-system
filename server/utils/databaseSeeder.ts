@@ -1,4 +1,4 @@
-import { UserModel, VenueModel, OffenderModel, IncidentModel, WarningModel, BanModel, ContactModel } from '../models';
+import { UserModel, VenueModel, OffenderModel, IncidentModel, WarningModel, BanModel, ContactModel } from '../models/models.js';
 import bcrypt from 'bcrypt';
 
 export async function seedDatabase() {

@@ -1,6 +1,6 @@
 import express from 'express';
-import * as contactController from '../controllers/contact.controller';
-import { checkPermission } from '../middleware/authMiddleware';
+import * as contactController from '../controllers/contact.controller.js';
+import { checkPermission } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 

@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
-import { BanModel, OffenderModel, UserModel, VenueModel, IncidentModel, WarningModel } from '../models';
-import mongoose, { Types } from 'mongoose';
-import { IBan } from '../models/index.js';
+import { BanModel, OffenderModel, UserModel, VenueModel, IncidentModel, WarningModel } from '../models/models.js';
+import { IBan } from '../models/models.js';
 
 
 export async function getBansForUser(userId: string) {

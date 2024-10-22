@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { OffenderModel, UserModel } from '../models';
+import { OffenderModel, UserModel } from '../models/models.js';
 import mongoose, { Types } from 'mongoose';
-import { IOffender } from '../models/index.js';
+import { IOffender } from '../models/models.js';
 import { off } from 'process';
 
 export async function getOffendersForUser(userId: string) {
