@@ -1,8 +1,21 @@
 import request from 'supertest';
-import { app, connectToDatabase } from '../../server/index';
+import { app, connectToDatabase } from '../../server/index.js';
 import mongoose from 'mongoose';
-import { UserModel, VenueModel, ContactModel, OffenderModel, IncidentModel, WarningModel, BanModel } from '../../server/models/models';
+import { 
+  UserModel,
+  VenueModel,
+  ContactModel, 
+  OffenderModel, 
+  IncidentModel, 
+  WarningModel, 
+  BanModel } from '../../server/models/index.js';
 
+  declare module 'express-session' {
+    interface SessionData {
+      [key: string]: any;
+    }
+  }
+  
 describe('Incident Reporting System Tests', () => {
   let adminCookie: string;
   let staffCookie: string;
