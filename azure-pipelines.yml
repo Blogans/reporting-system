@@ -26,11 +26,23 @@ stages:
     - script: |
         echo "Building application..."
         npm run build
-        echo "Copying configuration files to dist..."
+        echo "Copying files to dist..."
         cp web.config dist/
         cp package.json dist/
-        echo "Creating install script..."
-        cp install.js dist/
+        cp -r node_modules dist/
+        echo "Removing unnecessary files from node_modules..."
+        cd dist/node_modules
+        find . -name "*.md" -type f -delete
+        find . -name "*.txt" -type f -delete
+        find . -name "*.map" -type f -delete
+        find . -name "LICENSE" -type f -delete
+        find . -name "*.ts" -type f -delete
+        find . -type d -name "test" -exec rm -rf {} +
+        find . -type d -name "tests" -exec rm -rf {} +
+        find . -type d -name "docs" -exec rm -rf {} +
+        find . -type d -name "example" -exec rm -rf {} +
+        find . -type d -name "examples" -exec rm -rf {} +
+        cd ../..
         echo "Contents of dist directory:"
         ls -la dist/
       displayName: 'Build and prepare dist'
@@ -40,16 +52,10 @@ stages:
         rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist'
         includeRootFolder: false
         archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip' 
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
         replaceExistingArchive: true
+        verbose: false
       displayName: 'Archive Files'
-
-    - script: |
-        echo "Archive created. Contents:"
-        ls -la $(Build.ArtifactStagingDirectory)
-        echo "Contents of zip file:"
-        unzip -l $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-      displayName: 'Debug: Check artifact contents'
 
     - task: PublishBuildArtifacts@1
       inputs:
@@ -74,14 +80,14 @@ stages:
               downloadType: 'single'
               artifactName: 'drop'
               downloadPath: '$(System.ArtifactsDirectory)'
-
+          
           - task: AzureWebApp@1
             timeoutInMinutes: 10
             inputs:
               appType: webAppLinux
               azureSubscription: 'incident-reporting-system'
               appName: 'incident-report-system'
-              package: '$(System.ArtifactsDirectory)/drop/*.zip'
+              package: '$(System.ArtifactStagingDirectory)/drop/*.zip'
               appSettings: |
-                -NODE_ENV=production
-                -WEBSITE_NODE_DEFAULT_VERSION=20.x
+                NODE_ENV=production
+                WEBSITE_NODE_DEFAULT_VERSION=20.x
