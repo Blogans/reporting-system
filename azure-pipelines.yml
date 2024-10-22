@@ -73,15 +73,6 @@ stages:
               downloadType: 'single'
               artifactName: 'drop'
               downloadPath: '$(System.ArtifactsDirectory)'
-
-          - script: |
-              ls -la $(System.ArtifactsDirectory)
-            displayName: 'List Artifacts Directory'
-  
-          - script: |
-              cd $(System.ArtifactsDirectory)/drop/$(Build.BuildId)
-              npm install
-            displayName: 'Install Node.js Dependencies'
           
           - task: AzureWebApp@1
             timeoutInMinutes: 10
