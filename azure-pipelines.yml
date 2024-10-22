@@ -77,10 +77,10 @@ stages:
           - task: AzureWebApp@1
             timeoutInMinutes: 10
             inputs:
-              appType: webApp
+              appType: webAppLinux
               azureSubscription: 'incident-reporting-system'
               appName: 'incident-report-system'
               package: '$(System.ArtifactsDirectory)/**/*.zip'
               appSettings: |
-                -NODE_ENV production
-                -WEBSITE_NODE_DEFAULT_VERSION 20.x
+                -NODE_ENV=production
+                -WEBSITE_NODE_DEFAULT_VERSION=20.x
