@@ -92,6 +92,20 @@ stages:
               appName: 'incident-report-system'
               package: '$(System.ArtifactsDirectory)/drop/*.zip'
               appSettings: |
-                NODE_ENV=production
-                WEBSITE_NODE_DEFAULT_VERSION=20.x
-                RUN_FROM_PACKAGE=1
+                [
+                  {
+                    "name": "NODE_ENV",
+                    "value": "production",
+                    "slotSetting": false
+                  },
+                  {
+                    "name": "WEBSITE_NODE_DEFAULT_VERSION",
+                    "value": "20.x",
+                    "slotSetting": false
+                  },
+                  {
+                    "name": "WEBSITE_RUN_FROM_PACKAGE",
+                    "value": "1",
+                    "slotSetting": false
+                  }
+                ]
