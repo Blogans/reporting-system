@@ -91,21 +91,3 @@ stages:
               azureSubscription: 'incident-reporting-system'
               appName: 'incident-report-system'
               package: '$(System.ArtifactsDirectory)/drop/*.zip'
-              appSettings: |
-                [
-                  {
-                    "name": "NODE_ENV",
-                    "value": "production",
-                    "slotSetting": false
-                  },
-                  {
-                    "name": "WEBSITE_NODE_DEFAULT_VERSION",
-                    "value": "20.x",
-                    "slotSetting": false
-                  },
-                  {
-                    "name": "WEBSITE_RUN_FROM_PACKAGE",
-                    "value": "1",
-                    "slotSetting": false
-                  }
-                ]
