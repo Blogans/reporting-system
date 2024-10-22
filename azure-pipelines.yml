@@ -75,7 +75,11 @@ stages:
               downloadPath: '$(System.ArtifactsDirectory)'
 
           - script: |
-              cd $(System.ArtifactsDirectory)/path/to/unzipped
+              ls -la $(System.ArtifactsDirectory)
+            displayName: 'List Artifacts Directory'
+  
+          - script: |
+              cd $(System.ArtifactsDirectory)/drop/$(Build.BuildId)
               npm install
             displayName: 'Install Node.js Dependencies'
           
