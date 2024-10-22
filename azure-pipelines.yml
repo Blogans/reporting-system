@@ -26,8 +26,9 @@ stages:
     - script: |
         echo "Building application..."
         npm run build
-        echo "Copying web.config to dist..."
+        echo "Copying web.config and package.json to dist..."
         cp web.config dist/
+        cp package.json dist/ # Copy package.json to dist
         echo "Contents of dist directory:"
         ls -la dist/
       displayName: 'Build and prepare dist'
@@ -79,13 +80,18 @@ stages:
               ls -la $(System.ArtifactsDirectory)
             displayName: 'List Artifacts Directory'
           
+          - script: |
+              cd $(System.ArtifactsDirectory)/drop # Navigate to drop directory
+              npm install # Install dependencies
+            displayName: 'Install Node.js Dependencies'
+            
           - task: AzureWebApp@1
             timeoutInMinutes: 10
             inputs:
               appType: webAppLinux
               azureSubscription: 'incident-reporting-system'
               appName: 'incident-report-system'
-              package: '$(System.ArtifactsDirectory)/**/*.zip'
+              package: '$(System.ArtifactsDirectory)/drop/*.zip'
               appSettings: |
                 -NODE_ENV=production
                 -WEBSITE_NODE_DEFAULT_VERSION=20.x
