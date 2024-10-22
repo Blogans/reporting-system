@@ -29,8 +29,8 @@ stages:
         echo "Copying web.config and package.json to dist..."
         cp web.config dist/
         cp package.json dist/ # Copy package.json to dist
-        echo "Contents of dist directory:"
-        ls -la dist/
+        echo "Contents of dist directory after copy:"
+        ls -la dist/ # Check contents after copying
       displayName: 'Build and prepare dist'
 
     - task: ArchiveFiles@2
@@ -45,8 +45,6 @@ stages:
     - script: |
         echo "Archive created. Contents:"
         ls -la $(Build.ArtifactStagingDirectory)
-        echo "Archive size:"
-        du -sh $(Build.ArtifactStagingDirectory)/*
         echo "Contents of zip file:"
         unzip -l $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       displayName: 'Debug: Check artifact contents'
@@ -74,11 +72,6 @@ stages:
               downloadType: 'single'
               artifactName: 'drop'
               downloadPath: '$(System.ArtifactsDirectory)'
-
-          - script: |
-              echo "Contents of Artifacts Directory:"
-              ls -la $(System.ArtifactsDirectory)
-            displayName: 'List Artifacts Directory'
 
           - task: AzureWebApp@1
             timeoutInMinutes: 10
