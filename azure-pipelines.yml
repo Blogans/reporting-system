@@ -73,15 +73,6 @@ stages:
               artifactName: 'drop'
               downloadPath: '$(System.ArtifactsDirectory)'
 
-          - script: |
-              echo "Contents of Artifacts Directory:"
-              ls -la $(System.ArtifactsDirectory)
-              cd $(System.ArtifactsDirectory)/drop # Navigate to drop directory
-              echo "Contents of drop directory:"
-              ls -la # Check contents of drop directory
-              npm install # Install dependencies
-            displayName: 'Install Node.js Dependencies'
-
           - task: AzureWebApp@1
             timeoutInMinutes: 10
             inputs:
