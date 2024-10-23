@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "start": "node dist/server/index.js",
+    "start": "node server/index.js",
     "preinstall": "npm cache clean --force",
     "dev": "concurrently \"npm run server\" \"npm run startclient\"",
     "startclient": "vite",

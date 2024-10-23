@@ -15,24 +15,22 @@ stages:
       displayName: "Install Node.js"
 
     - script: |
-        # Create a temporary package.json without the self-reference
-        sudo apt-get update
-        sudo apt-get install -y jq
-        jq 'del(.dependencies["incident-reporting-system"])' package.json > temp-package.json
-        mv temp-package.json package.json
-        
-        # Install and build
+        # Install dependencies and build
         npm install
         npm run build
         
-        # Create deployment directory with all necessary files
+        # Create deployment directory
         mkdir deploy
-        cp -r dist/* deploy/
-        cp -r node_modules deploy/
-        cp package.json deploy/
-        cp web.config deploy/
         
-        # Clean up node_modules to reduce size
+        # Copy server files
+        mkdir -p deploy/server
+        cp -r dist/server/* deploy/server/
+        
+        # Copy client files to root
+        cp -r dist/* deploy/
+        
+        # Copy node_modules and clean them up
+        cp -r node_modules deploy/
         cd deploy/node_modules
         find . -name "*.md" -type f -delete
         find . -name "*.txt" -type f -delete
@@ -46,9 +44,13 @@ stages:
         find . -type d -name "examples" -exec rm -rf {} +
         cd ../..
         
-        echo "Deployment directory contents:"
+        # Copy support files
+        cp web.config deploy/
+        cp package.json deploy/
+        
+        echo "Deploy directory contents:"
         ls -la deploy/
-        echo "Deployment size:"
+        echo "Deploy directory size:"
         du -sh deploy/
       displayName: 'Prepare build'
 
