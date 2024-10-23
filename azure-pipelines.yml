@@ -15,7 +15,13 @@ stages:
       displayName: "Install Node.js"
 
     - script: |
-        npm install
+        # Clean up node_modules and package-lock.json
+        rm -rf node_modules package-lock.json
+        
+        # Install production dependencies
+        npm install --omit=dev
+        
+        # Build the project
         npm run build
         
         # Create clean deploy directory
