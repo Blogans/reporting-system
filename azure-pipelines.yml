@@ -98,7 +98,7 @@ stages:
             displayName: 'Debug: Post-download check'
 
           - task: AzureWebApp@1
-            timeoutInMinutes: 10
+            timeoutInMinutes: 30
             inputs:
               appType: webAppLinux
               azureSubscription: 'incident-reporting-system'
