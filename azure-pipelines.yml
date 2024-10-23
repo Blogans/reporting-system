@@ -15,13 +15,46 @@ stages:
       displayName: "Install Node.js"
 
     - script: |
+        # Create a temporary package.json without the self-reference
+        sudo apt-get update
+        sudo apt-get install -y jq
+        jq 'del(.dependencies["incident-reporting-system"])' package.json > temp-package.json
+        mv temp-package.json package.json
+        
+        # Install and build
         npm install
-        npm run build --if-present
-      displayName: 'npm install, build and test'
+        npm run build
+        
+        # Create deployment directory with all necessary files
+        mkdir deploy
+        cp -r dist/* deploy/
+        cp -r node_modules deploy/
+        cp package.json deploy/
+        cp web.config deploy/
+        
+        # Clean up node_modules to reduce size
+        cd deploy/node_modules
+        find . -name "*.md" -type f -delete
+        find . -name "*.txt" -type f -delete
+        find . -name "*.map" -type f -delete
+        find . -name "LICENSE" -type f -delete
+        find . -name "*.ts" -type f -delete
+        find . -type d -name "test" -exec rm -rf {} +
+        find . -type d -name "tests" -exec rm -rf {} +
+        find . -type d -name "docs" -exec rm -rf {} +
+        find . -type d -name "example" -exec rm -rf {} +
+        find . -type d -name "examples" -exec rm -rf {} +
+        cd ../..
+        
+        echo "Deployment directory contents:"
+        ls -la deploy/
+        echo "Deployment size:"
+        du -sh deploy/
+      displayName: 'Prepare build'
 
     - task: ArchiveFiles@2
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/deploy'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
@@ -33,9 +66,6 @@ stages:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
         publishLocation: 'Container'
-
-    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-      artifact: drop
 
 - stage: Deploy
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
@@ -54,3 +84,16 @@ stages:
               appName: 'incident-report-system'
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
               deploymentMethod: 'zipDeploy'
+              appSettings: |
+                [
+                  {
+                    "name": "WEBSITE_NODE_DEFAULT_VERSION",
+                    "value": "~20",
+                    "slotSetting": false
+                  },
+                  {
+                    "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
+                    "value": "false",
+                    "slotSetting": false
+                  }
+                ]
