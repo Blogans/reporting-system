@@ -15,9 +15,7 @@ import dashboardRoutes from './routes/dashboard.route.js';
 import reportRoutes from './routes/report.route.js';
 import path from 'path';
 import databaseSeeder from './utils/databaseSeeder.js';
-import fs from 'fs';
 
-const logFile = path.join(__dirname, '../../LogFiles/nodejs/app.log');
 // Replace import.meta.url with __dirname
 const _dirname = path.resolve();
 
@@ -25,15 +23,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-function log(message: string) {
-  const timestamp = new Date().toISOString();
-  const logMessage = `${timestamp}: ${message}\n`;
-  fs.appendFileSync(logFile, logMessage);
-}
-
 
 // CORS configuration
-if (process.env.NODE_ENV === 'production') {
+/*if (process.env.NODE_ENV === 'production') {
   console.log('Setting up CORS for production');
   app.use(cors());
 } else {
@@ -43,6 +35,10 @@ if (process.env.NODE_ENV === 'production') {
     credentials: true
   }));
 }
+*/
+
+console.log('Setting up CORS for production');
+app.use(cors());
 
 app.use(express.json());
 app.use(session({
@@ -58,17 +54,6 @@ app.use(session({
 // Serve static files from the React app
 app.use(express.static(path.join(_dirname, '..')));
 
-// Add error handling middleware at the end
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  const errorDetails = {
-      url: req.url,
-      method: req.method,
-      error: err.message,
-      stack: err.stack
-  };
-  log(`Error: ${JSON.stringify(errorDetails, null, 2)}`);
-  res.status(500).json({ error: err.message });
-});
 
 // API routes
 app.use('/api/auth', authRoutes);
