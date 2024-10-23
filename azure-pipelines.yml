@@ -98,11 +98,3 @@ stages:
               appName: 'incident-report-system'
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
               deploymentMethod: 'zipDeploy'
-              appSettings: |
-                [
-                  {
-                    "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
-                    "value": "false",
-                    "slotSetting": false
-                  }
-                ]
