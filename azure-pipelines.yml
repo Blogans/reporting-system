@@ -16,6 +16,13 @@ stages:
 
     - script: |
         # Install dependencies and build
+        sudo apt-get update
+        sudo apt-get install -y jq
+        
+        # Remove self-reference before install
+        jq 'del(.dependencies["incident-reporting-system"])' package.json > temp-package.json
+        mv temp-package.json package.json
+        
         npm install
         npm run build
         
@@ -32,6 +39,11 @@ stages:
         # Copy node_modules and clean them up
         cp -r node_modules deploy/
         cd deploy/node_modules
+        
+        # Remove self-reference directory if it exists
+        rm -rf incident-reporting-system
+        
+        # Clean up node_modules
         find . -name "*.md" -type f -delete
         find . -name "*.txt" -type f -delete
         find . -name "*.map" -type f -delete
