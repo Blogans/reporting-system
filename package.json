@@ -1,7 +1,7 @@
 {
-  "name": "react-app",
+  "name": "incident-reporting-system",
   "private": true,
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "start": "node dist/server/index.js",
     "dev": "concurrently \"npm run server\" \"npm run startclient\"",
@@ -19,11 +19,11 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
+    "incident-reporting-system": "file:",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.2",
     "react": "^18.2.0",
-    "react-app": "file:",
     "react-bootstrap": "^2.10.4",
     "react-datepicker": "^7.4.0",
     "react-dom": "^18.2.0",
@@ -54,5 +54,8 @@
     "typescript": "^5.5.4",
     "vite": "^4.1.0",
     "vitest": "^2.0.5"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
