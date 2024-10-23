@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import bcrypt from 'bcryptjs';
+import bcryptjs from 'bcryptjs';
 import { UserModel } from '../models/models.js';
 
 export const register = async (req: Request, res: Response) => {
@@ -11,7 +11,7 @@ export const register = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'User already exists' });
     }
     
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcryptjs.hash(password, 10);
     
     const user = await UserModel.create({
       username,
@@ -47,7 +47,7 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Authentication failed' });
     }
     
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcryptjs.compare(password, user.password);
     
     if (!isMatch) {
       return res.status(401).json({ message: 'Authentication failed' });

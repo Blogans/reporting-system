@@ -1,5 +1,5 @@
 import { UserModel, VenueModel, OffenderModel, IncidentModel, WarningModel, BanModel, ContactModel } from '../models/models.js';
-import bcrypt from 'bcryptjs';
+import bcryptjs from 'bcryptjs';
 
 export async function seedDatabase() {
   try {
@@ -18,21 +18,21 @@ export async function seedDatabase() {
     const adminUser = await UserModel.create({
       username: 'admin',
       email: 'admin@example.com',
-      password: await bcrypt.hash('adminpassword', 10),
+      password: await bcryptjs.hash('adminpassword', 10),
       role: 'admin'
     });
 
     const managerUser = await UserModel.create({
       username: 'manager',
       email: 'manager@example.com',
-      password: await bcrypt.hash('managerpassword', 10),
+      password: await bcryptjs.hash('managerpassword', 10),
       role: 'manager'
     });
 
     const staffUser = await UserModel.create({
       username: 'staff',
       email: 'staff@example.com',
-      password: await bcrypt.hash('staffpassword', 10),
+      password: await bcryptjs.hash('staffpassword', 10),
       role: 'staff'
     });
 
