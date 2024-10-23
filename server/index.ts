@@ -15,13 +15,22 @@ import dashboardRoutes from './routes/dashboard.route.js';
 import reportRoutes from './routes/report.route.js';
 import path from 'path';
 import databaseSeeder from './utils/databaseSeeder.js';
+import fs from 'fs';
 
+const logFile = path.join(__dirname, '../../LogFiles/nodejs/app.log');
 // Replace import.meta.url with __dirname
 const _dirname = path.resolve();
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
+
+function log(message: string) {
+  const timestamp = new Date().toISOString();
+  const logMessage = `${timestamp}: ${message}\n`;
+  fs.appendFileSync(logFile, logMessage);
+}
+
 
 // CORS configuration
 if (process.env.NODE_ENV === 'production') {
@@ -49,28 +58,15 @@ app.use(session({
 // Serve static files from the React app
 app.use(express.static(path.join(_dirname, '..')));
 
-// Add this before your routes
-app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-  
-  // Capture the original res.json to log responses
-  const originalJson = res.json;
-  res.json = function(data) {
-    console.log(`Response for ${req.url}:`, data);
-    return originalJson.call(this, data);
-  };
-  
-  next();
-});
-
 // Add error handling middleware at the end
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error('Error handling request:', {
-    url: req.url,
-    method: req.method,
-    error: err.message,
-    stack: err.stack
-  });
+  const errorDetails = {
+      url: req.url,
+      method: req.method,
+      error: err.message,
+      stack: err.stack
+  };
+  log(`Error: ${JSON.stringify(errorDetails, null, 2)}`);
   res.status(500).json({ error: err.message });
 });
 
