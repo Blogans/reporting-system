@@ -11,7 +11,7 @@ stages:
     steps:
     - task: NodeTool@0
       inputs:
-        versionSpec: "20.x"
+        versionSpec: "22.5.1"
       displayName: "Install Node.js"
 
     - script: |
@@ -100,11 +100,6 @@ stages:
               deploymentMethod: 'zipDeploy'
               appSettings: |
                 [
-                  {
-                    "name": "WEBSITE_NODE_DEFAULT_VERSION",
-                    "value": "~20",
-                    "slotSetting": false
-                  },
                   {
                     "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
                     "value": "false",
