@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction, ErrorRequestHandler} from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -25,8 +25,10 @@ const PORT = process.env.PORT || 8080;
 
 // CORS configuration
 if (process.env.NODE_ENV === 'production') {
+  console.log('Setting up CORS for production');
   app.use(cors());
 } else {
+  console.log('Setting up CORS for development');
   app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true
@@ -46,6 +48,31 @@ app.use(session({
 
 // Serve static files from the React app
 app.use(express.static(path.join(_dirname, '..')));
+
+// Add this before your routes
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  
+  // Capture the original res.json to log responses
+  const originalJson = res.json;
+  res.json = function(data) {
+    console.log(`Response for ${req.url}:`, data);
+    return originalJson.call(this, data);
+  };
+  
+  next();
+});
+
+// Add error handling middleware at the end
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error('Error handling request:', {
+    url: req.url,
+    method: req.method,
+    error: err.message,
+    stack: err.stack
+  });
+  res.status(500).json({ error: err.message });
+});
 
 // API routes
 app.use('/api/auth', authRoutes);
