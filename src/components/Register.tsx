@@ -28,6 +28,7 @@ const Register: React.FC = () => {
       });
 
       if (!response.ok) {
+        console.log(response);
         throw new Error("Registration failed");
       }
 
@@ -35,6 +36,7 @@ const Register: React.FC = () => {
       setUser(data.user);
       navigate("/dashboard");
     } catch (err) {
+      console.log(err);
       setError("Registration failed");
     }
   };
