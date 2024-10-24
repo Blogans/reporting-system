@@ -27,24 +27,10 @@ const Dashboard: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch('/api/dashboard/stats', {
-        method: 'GET',
-        credentials: 'include',  // Add this
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      });
-
+      const response = await fetch('http://localhost:8080/api/dashboard/stats');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new TypeError("Response was not JSON");
-      }
-      
       const data = await response.json();
       console.log('Received data:', data); // Debug log
       setStats(data);
