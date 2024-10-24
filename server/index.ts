@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from 'cors';
 import * as dotenv from 'dotenv';
 import session from 'express-session';
 import path from 'path';
@@ -8,17 +7,10 @@ import venueRoutes from './routes/venue.route';
 import dashboardRoutes from './routes/dashboard.route';
 
 dotenv.config();
-
 const app = express();
 const PORT = process.env.PORT || 8080;
 
 // Middlewares
-app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true,
-}));
-
-
 app.use(express.json());
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
@@ -30,9 +22,10 @@ app.use(session({
   }
 }));
 
-// Routes
+// API Routes
 app.use('/api/venues', venueRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+
 
 // Basic test route
 app.get('/api/test', (_req, res) => {
@@ -48,19 +41,22 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../client')));
+
+// All other GET requests not handled before will return our React app
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(__dirname, '../client/index.html'));
+});
+
 async function startServer() {
   try {
     await connectToDatabase();
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
-      console.log(`CORS enabled for origin: http://localhost:5173`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);
-    if (error instanceof Error) {
-      console.error('Error details:', error.message);
-      console.error('Stack trace:', error.stack);
-    }
     process.exit(1);
   }
 }
