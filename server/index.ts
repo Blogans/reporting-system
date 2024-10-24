@@ -12,7 +12,9 @@ const PORT = process.env.PORT || 8080;
 
 // Middlewares
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? false : 'http://localhost:5173',
+  origin: 'http://localhost:5173',  // Your React app's URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 

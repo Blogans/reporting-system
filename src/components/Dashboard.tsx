@@ -22,7 +22,12 @@ const Dashboard: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch('http://localhost:8080/api/dashboard/stats');
+      const response = await fetch('http://localhost:8080/api/dashboard/stats', {
+        credentials: 'include',  // Add this
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
