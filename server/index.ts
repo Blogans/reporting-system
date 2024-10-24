@@ -13,6 +13,7 @@ app.use(express.json());
 
 // Test API endpoint
 app.get('/api/test', (_req, res) => {
+  res.setHeader('Content-Type', 'application/json');
   res.json({ message: 'API is working!' });
 });
 
