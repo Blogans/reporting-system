@@ -16,11 +16,12 @@ const Dashboard: React.FC = () => {
   });
 
   useEffect(() => {
-    fetchStats();
     fetch('http://localhost:8080/api/test')
     .then(res => res.json())
     .then(data => setMessage(data.message))
     .catch(err => setError(err.message))
+    
+    fetchStats();
   }, []);
 
   const fetchStats = async () => {
