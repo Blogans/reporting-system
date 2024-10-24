@@ -2,13 +2,26 @@ import express from 'express';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
 import path from 'path';
+import session from 'express-session';
+import { connectToDatabase } from './utils/database';
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-app.use(cors());
+app.use(cors({
+  credentials: true,
+}));
 app.use(express.json());
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 24 * 60 * 60 * 1000 // 24 hour session expiry
+  }
+}));
 
 // Test API endpoint
 app.get('/api/test', (_req, res) => {
@@ -34,8 +47,19 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+async function startServer() {
+  try {
+    await connectToDatabase();
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+startServer();
+
 
 export default app;
