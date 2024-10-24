@@ -22,13 +22,13 @@ const Dashboard: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch('http://localhost:8080/api/dashboard/stats');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      console.log('Received data:', data); // Debug log
-      setStats(data);
+
+      fetch('http://localhost:8080/api/dashboard/stats')
+        .then(res => res.json())
+        .then(data => setStats(data))
+        .then(() => setLoading(false))
+        .catch(err => setError(err instanceof Error ? err.message : 'An error occurred'))
+        
     } catch (error) {
       console.error("Error fetching stats:", error);
       setError(error instanceof Error ? error.message : 'An error occurred');
