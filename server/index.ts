@@ -4,6 +4,8 @@ import * as dotenv from 'dotenv';
 import path from 'path';
 import session from 'express-session';
 import { connectToDatabase } from './utils/database';
+import venueRoutes from './routes/venue.route';
+import dashboardRoutes from './routes/dashboard.route';
 
 dotenv.config();
 const app = express();
@@ -29,14 +31,8 @@ app.get('/api/test', (_req, res) => {
   res.json({ message: 'API is working!' });
 });
 
-app.get('/api/dashboard/stats', (_req, res) => {
-  res.json({
-    totalIncidents: 42,
-    totalWarnings: 15,
-    totalBans: 7,
-    totalVenues: 3,
-  })
-});
+app.use('/api/venues', venueRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Serve static files from root
 if (process.env.NODE_ENV === 'production') {

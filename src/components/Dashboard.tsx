@@ -13,10 +13,35 @@ const Dashboard: React.FC = () => {
     totalBans: 0,
     totalVenues: 0,
   });
+  const [dbStatus, setDbStatus] = useState<{
+    message?: string;
+    connectionStatus?: string;
+    error?: string;
+  }>({});
 
   useEffect(() => {
     fetchStats();
   }, []);
+
+  const testDatabase = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      fetch('http://localhost:8080/api/venues/db')
+        .then(res => res.json())
+        .then(data => setDbStatus(data))
+        .then(() => setLoading(false))
+        .catch(err => setError(err instanceof Error ? err.message : 'An error occurred'))
+    
+      } catch (error) {
+      console.error("Error testing database:", error);
+      setError(error instanceof Error ? error.message : 'An error occurred');
+      setDbStatus({ connectionStatus: 'Failed', error: error instanceof Error ? error.message : 'Unknown error' });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchStats = async () => {
     try {
@@ -28,7 +53,7 @@ const Dashboard: React.FC = () => {
         .then(data => setStats(data))
         .then(() => setLoading(false))
         .catch(err => setError(err instanceof Error ? err.message : 'An error occurred'))
-        
+
     } catch (error) {
       console.error("Error fetching stats:", error);
       setError(error instanceof Error ? error.message : 'An error occurred');
@@ -36,6 +61,25 @@ const Dashboard: React.FC = () => {
       setLoading(false);
     }
   };
+
+  const dbTestSection = (
+    <div className="mt-3">
+      <button 
+        className="btn btn-primary mb-2" 
+        onClick={testDatabase}
+        disabled={loading}
+      >
+        Test Database Connection
+      </button>
+      {dbStatus.connectionStatus && (
+        <div className={`alert ${dbStatus.connectionStatus === 'Connected' ? 'alert-success' : 'alert-danger'}`}>
+          <strong>DB Status:</strong> {dbStatus.connectionStatus}<br />
+          {dbStatus.message && <div><strong>Message:</strong> {dbStatus.message}</div>}
+          {dbStatus.error && <div><strong>Error:</strong> {dbStatus.error}</div>}
+        </div>
+      )}
+    </div>
+  );
 
   // Debug section at top of dashboard
   const debugSection = (
@@ -47,6 +91,7 @@ const Dashboard: React.FC = () => {
           <strong>Error:</strong> {error || 'None'}<br />
           <strong>Stats:</strong> {JSON.stringify(stats, null, 2)}
         </div>
+        {dbTestSection}
       </Card.Body>
     </Card>
   );
