@@ -26,49 +26,13 @@ stages:
         npm install
         npm run build
         
-        # Create deployment directory
-        mkdir deploy
-        
-        # Copy server files
-        mkdir -p deploy/server
-        cp -r dist/server/* deploy/server/
-        
-        # Copy client files to root
-        cp -r dist/client/* deploy/
-        
-        # Copy node_modules and clean them up
-        cp -r node_modules deploy/
-        cd deploy/node_modules
-        
         # Remove self-reference directory if it exists
         rm -rf report-project
-        
-        # Clean up node_modules
-        find . -name "*.md" -type f -delete
-        find . -name "*.txt" -type f -delete
-        find . -name "*.map" -type f -delete
-        find . -name "LICENSE" -type f -delete
-        find . -name "*.ts" -type f -delete
-        find . -type d -name "test" -exec rm -rf {} +
-        find . -type d -name "tests" -exec rm -rf {} +
-        find . -type d -name "docs" -exec rm -rf {} +
-        find . -type d -name "example" -exec rm -rf {} +
-        find . -type d -name "examples" -exec rm -rf {} +
-        cd ../..
-        
-        # Copy support files
-        cp web.config deploy/
-        cp package.json deploy/
-        
-        echo "Deploy directory contents:"
-        ls -la deploy/
-        echo "Deploy directory size:"
-        du -sh deploy/
       displayName: 'Prepare build'
 
     - task: ArchiveFiles@2
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/deploy'
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
