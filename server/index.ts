@@ -17,6 +17,19 @@ app.get('/api/test', (_req, res) => {
   res.json({ message: 'API is working!' });
 });
 
+// Add this to your server/index.ts
+app.get('/api/dashboard/stats', (_req, res) => {
+  // Simulate a delay
+  setTimeout(() => {
+    res.json({
+      totalIncidents: 42,
+      totalWarnings: 15,
+      totalBans: 7,
+      totalVenues: 3,
+    });
+  }, 1000);
+});
+
 // Production static file serving
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../')));

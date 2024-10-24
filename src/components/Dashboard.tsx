@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Container, Row, Col, Card, Alert } from "react-bootstrap";
 import { useAuth } from "../context/auth.context.tsx";
-import { useApi } from "../util/apiUtil.tsx";
 import StatCard from "./dashboard/StatCard.tsx";
-import RecentWarnings from "./dashboard/RecentWarnings.tsx";
-import RecentIncidents from "./dashboard/RecentIncidents.tsx";
-import RecentBans from "./dashboard/RecentBans.tsx";
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
-  const { fetchWithAuth } = useApi();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [stats, setStats] = useState({
     totalIncidents: 0,
     totalWarnings: 0,
@@ -23,64 +20,62 @@ const Dashboard: React.FC = () => {
 
   const fetchStats = async () => {
     try {
-      const data = await fetchWithAuth("/api/dashboard/stats");
+      setLoading(true);
+      setError(null);
+      const response = await fetch('http://localhost:8080/api/dashboard/stats');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log('Received data:', data); // Debug log
       setStats(data);
     } catch (error) {
       console.error("Error fetching stats:", error);
+      setError(error instanceof Error ? error.message : 'An error occurred');
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+  // Debug section at top of dashboard
+  const debugSection = (
+    <Card className="mb-4">
+      <Card.Body>
+        <Card.Title>Debug Information</Card.Title>
+        <div>
+          <strong>Loading:</strong> {loading.toString()}<br />
+          <strong>Error:</strong> {error || 'None'}<br />
+          <strong>Stats:</strong> {JSON.stringify(stats, null, 2)}
+        </div>
+      </Card.Body>
+    </Card>
+  );
 
   return (
     <Container className="mt-4">
       <h1>Welcome to the Dashboard</h1>
-      <p>You are logged in as: {user.email}</p>
-      <p>Your role is: {user.role}</p>
+      {user && (
+        <>
+          <p>You are logged in as: {user.email}</p>
+          <p>Your role is: {user.role}</p>
+        </>
+      )}
+
+      {debugSection}
+
+      {error && <Alert variant="danger">{error}</Alert>}
       
       <Row className="mt-4">
         <Col md={3}>
-          <StatCard title="Total Incidents" value={stats.totalIncidents} />
+          <StatCard 
+            title="Total Incidents" 
+            value={stats.totalIncidents} 
+          />
         </Col>
-        <Col md={3}>
-          <StatCard title="Total Warnings" value={stats.totalWarnings} />
-        </Col>
-        <Col md={3}>
-          <StatCard title="Total Bans" value={stats.totalBans} />
-        </Col>
-        <Col md={3}>
-          <StatCard title="Total Venues" value={stats.totalVenues} />
-        </Col>
+        {/* ... other StatCards ... */}
       </Row>
 
-      <Row className="mt-4">
-        <Col md={4}>
-          <Card>
-            <Card.Body>
-              <Card.Title>Recent Warnings</Card.Title>
-              <RecentWarnings />
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={4}>
-          <Card>
-            <Card.Body>
-              <Card.Title>Recent Incidents</Card.Title>
-              <RecentIncidents />
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={4}>
-          <Card>
-            <Card.Body>
-              <Card.Title>Recent Bans</Card.Title>
-              <RecentBans />
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+      {/* ... rest of your components ... */}
     </Container>
   );
 };
