@@ -7,7 +7,7 @@
     "dev:server": "nodemon --watch server/**/*.ts --exec \"ts-node -P server/tsconfig.server.json\" server/index.ts",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "build": "npm run build:client && npm run build:server",
-    "build:client": "tsc -b && vite build --outDir dist/client",
+    "build:client": "tsc -b && vite build --outDir dist/",
     "build:server": "tsc -p server/tsconfig.server.json",
     "start": "node dist/server/index.js",
     "preview": "vite preview",
