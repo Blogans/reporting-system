@@ -13,6 +13,11 @@ const Dashboard: React.FC = () => {
     totalBans: 0,
     totalVenues: 0,
   });
+  const [dbStatus, setDbStatus] = useState<{
+    message?: string;
+    connectionStatus?: string;
+    error?: string;
+  }>({});
 
   useEffect(() => {
     fetchStats();
@@ -42,7 +47,46 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  // Debug section at top of dashboard
+  const testDatabase = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch('http://localhost:8080/api/test/db');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setDbStatus(data);
+    } catch (error) {
+      console.error("Error testing database:", error);
+      setError(error instanceof Error ? error.message : 'An error occurred');
+      setDbStatus({ connectionStatus: 'Failed', error: error instanceof Error ? error.message : 'Unknown error' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Add this section to your debug card
+  const dbTestSection = (
+    <div className="mt-3">
+      <button 
+        className="btn btn-primary mb-2" 
+        onClick={testDatabase}
+        disabled={loading}
+      >
+        Test Database Connection
+      </button>
+      {dbStatus.connectionStatus && (
+        <div className={`alert ${dbStatus.connectionStatus === 'Connected' ? 'alert-success' : 'alert-danger'}`}>
+          <strong>DB Status:</strong> {dbStatus.connectionStatus}<br />
+          {dbStatus.message && <div><strong>Message:</strong> {dbStatus.message}</div>}
+          {dbStatus.error && <div><strong>Error:</strong> {dbStatus.error}</div>}
+        </div>
+      )}
+    </div>
+  );
+
+  // Add dbTestSection to your debug card
   const debugSection = (
     <Card className="mb-4">
       <Card.Body>
@@ -52,9 +96,11 @@ const Dashboard: React.FC = () => {
           <strong>Error:</strong> {error || 'None'}<br />
           <strong>Stats:</strong> {JSON.stringify(stats, null, 2)}
         </div>
+        {dbTestSection}
       </Card.Body>
     </Card>
   );
+
 
   return (
     <Container className="mt-4">
