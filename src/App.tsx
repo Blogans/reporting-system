@@ -6,7 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { AuthProvider, useAuth } from "./context/auth.context";
+import { AuthProvider } from "./context/auth.context";
 import Login from "./components/Login.tsx";
 import Dashboard from "./components/Dashboard.tsx";
 import VenueList from "./components/venue/VenueList.tsx";
@@ -34,12 +34,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 };
 
 function AppContent() {
-  const { isLoading } = useAuth();
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <Router>
       <AppNavbar />
