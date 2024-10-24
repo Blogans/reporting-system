@@ -16,6 +16,18 @@ app.get('/api/test', (_req, res) => {
   res.json({ message: 'API is working!' });
 });
 
+app.get('/api/dashboard/stats', (_req, res) => {
+  // Simulate a delay
+  setTimeout(() => {
+    res.json({
+      totalIncidents: 42,
+      totalWarnings: 15,
+      totalBans: 7,
+      totalVenues: 3,
+    });
+  }, 1000);
+});
+
 // Serve static files from root
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../')));

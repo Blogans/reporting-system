@@ -4,7 +4,6 @@ import { useAuth } from "../context/auth.context.tsx";
 import StatCard from "./dashboard/StatCard.tsx";
 
 const Dashboard: React.FC = () => {
-  const [message, setMessage] = useState('')
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -16,11 +15,6 @@ const Dashboard: React.FC = () => {
   });
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/test')
-    .then(res => res.json())
-    .then(data => setMessage(data.message))
-    .catch(err => setError(err.message))
-    
     fetchStats();
   }, []);
 
@@ -48,13 +42,6 @@ const Dashboard: React.FC = () => {
     <Card className="mb-4">
       <Card.Body>
         <Card.Title>Debug Information</Card.Title>
-
-        <>
-      <h1>React + Express Test</h1>
-      {message && <p>Server says: {message}</p>}
-      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-    </>
-    
         <div>
           <strong>Loading:</strong> {loading.toString()}<br />
           <strong>Error:</strong> {error || 'None'}<br />
@@ -74,11 +61,6 @@ const Dashboard: React.FC = () => {
         </>
       )}
 
-    <>
-      <h1>React + Express Test</h1>
-      {message && <p>Server says: {message}</p>}
-      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-    </>
       {debugSection}
 
       {error && <Alert variant="danger">{error}</Alert>}
