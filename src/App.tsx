@@ -6,12 +6,18 @@ function App() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetch('/api/test')
-      .then(res => res.json())
-      .then(data => setMessage(data.message))
-      .catch(err => setError(err.message))
+    fetchData()
   }, [])
 
+  const fetchData = async () => {
+    try {
+      const res = await fetch('/api/test')
+      const data = await res.json()
+      setMessage(data.message)
+    } catch (err) {
+      setError(err.message)
+    }
+  }
   return (
     <>
       <h1>React + Express Test</h1>
