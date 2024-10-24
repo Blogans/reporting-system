@@ -27,7 +27,7 @@ const Dashboard: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch('http://localhost:8080/api/dashboard/stats', {
+      const response = await fetch('/api/dashboard/stats', {
         method: 'GET',
         credentials: 'include',  // Add this
         headers: {
@@ -60,7 +60,7 @@ const Dashboard: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch('http://localhost:8080/api/test/db');
+      const response = await fetch('/api/test/db');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
