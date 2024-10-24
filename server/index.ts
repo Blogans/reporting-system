@@ -5,10 +5,13 @@ import path from 'path';
 import { connectToDatabase } from './utils/database';
 import venueRoutes from './routes/venue.route';
 import dashboardRoutes from './routes/dashboard.route';
+import cors from 'cors';
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
+
+app.use(cors());
 
 // Middlewares
 app.use(express.json());
