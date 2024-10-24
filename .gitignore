@@ -21,6 +21,4 @@ dist-ssr
 *.ntvs*
 *.njsproj
 *.sln
-index.ts
 *.sw?
-test-results
