@@ -6,21 +6,30 @@ import venueRoutes from './routes/venue.route';
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-app.use(cors());
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:8080',
+  'https://incident-report-system-g4dtfwhwegdvc7ah.australiaeast-01.azurewebsites.net',
+  '*'
+];
+
+app.use(cors({
+  origin: function(origin, callback) {
+    // allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      return callback(new Error('The CORS policy for this site does not allow access from the specified Origin.'), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
+}));
 
 app.use('/api/venues', venueRoutes);
 
 app.get('/api/test', (_req, res) => {
   res.json({ message: 'Hello from server!' });
-});
-
-app.get('/api/dashboard/stats', (_req, res) => {
-  res.json({
-    totalIncidents: 42,
-    totalWarnings: 15,
-    totalBans: 7,
-    totalVenues: 3,
-  });
 });
 
 // Serve static files from root
