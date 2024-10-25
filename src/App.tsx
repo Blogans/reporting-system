@@ -1,24 +1,19 @@
 import { useState, useEffect } from 'react'
-import './App.css'
 
 function App() {
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState('Loading...')
 
   useEffect(() => {
     fetch('http://localhost:8080/api/test')
       .then(res => res.json())
       .then(data => setMessage(data.message))
-      .catch(err => console.error('Error:', err))
+      .catch(err => {
+        console.error(err)
+        setMessage('Error connecting to server')
+      })
   }, [])
 
-  return (
-    <>
-      <h1>Vite + React + Express</h1>
-      <div>
-        API Message: {message}
-      </div>
-    </>
-  )
+  return <div>{message}</div>
 }
 
 export default App
