@@ -5,15 +5,10 @@ function App() {
   const [message, setMessage] = useState('')
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/test', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    fetch('http://localhost:8080/api/test')
       .then(res => res.json())
       .then(data => setMessage(data.message))
-      .catch(err => console.error('Error:', err))
+      .catch(err => setMessage('Error: ' + err.message))
   }, [])
 
   return (

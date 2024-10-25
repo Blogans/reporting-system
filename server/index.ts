@@ -5,11 +5,16 @@ import session from 'express-session';
 import { connectToDatabase } from './utils/database';
 import venueRoutes from './routes/venue.route';
 import dashboardRoutes from './routes/dashboard.route';
-import authRoutes from './routes/auth.route';
+import cors from 'cors';
 
 dotenv.config();
+
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
+
+app.use(cors({
+  origin: '*'
+}));
 
 app.use(express.json());
 app.use(session({
@@ -34,7 +39,6 @@ app.get('/api/test', (_req, res) => {
 });
 */
 
-app.use('/api/auth', authRoutes);
 app.use('/api/venues', venueRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
