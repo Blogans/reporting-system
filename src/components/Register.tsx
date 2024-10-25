@@ -17,35 +17,33 @@ const Register: React.FC = () => {
     e.preventDefault();
     setError("");
 
-    try {
-      const response = await fetch('http://localhost:8080/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include', // needed for cookies/session
-        body: JSON.stringify({
-          username,
-          email,
-          password,
-          role
-        })
+    // Using the same pattern as your working dashboard fetch
+    fetch('http://localhost:8080/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        email,
+        password,
+        role
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) {
+          setUser(data.user);
+          navigate("/dashboard");
+        } else {
+          throw new Error(data.message || 'Registration failed');
+        }
+      })
+      .catch(err => {
+        console.error('Registration error:', err);
+        setError(err instanceof Error ? err.message : 'An error occurred');
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Registration failed');
-      }
-
-      const data = await response.json();
-      setUser(data.user);
-      navigate("/dashboard");
-    } catch (err) {
-      console.error('Registration error:', err);
-      setError(err instanceof Error ? err.message : 'Registration failed');
-    }
   };
-
   return (
     <Container className="mt-5">
       <Row className="justify-content-center">
