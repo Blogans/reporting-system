@@ -28,7 +28,13 @@ const Dashboard: React.FC = () => {
       setLoading(true);
       setError(null);
 
-      fetch('http://localhost:8080/api/venues/db')
+      fetch('http://localhost:8080/api/venues/db'{
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
         .then(res => res.json())
         .then(data => setDbStatus(data))
         .then(() => setLoading(false))
