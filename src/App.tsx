@@ -8,7 +8,7 @@ function App() {
     fetch('http://localhost:8080/api/test')
       .then(res => res.json())
       .then(data => setMessage(data.message))
-      .catch(err => setMessage('Error: ' + err.message))
+      .catch(err => console.error('Error:', err))
   }, [])
 
   return (
