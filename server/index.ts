@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from 'cors';
 import * as dotenv from 'dotenv';
 import path from 'path';
 import session from 'express-session';
@@ -10,12 +9,7 @@ import authRoutes from './routes/auth.route';
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 8080;
-
-app.use(cors({
-  origin: 'http://localhost:5173', // or whatever your frontend URL is
-  credentials: true // needed for cookies/session
-}));
+const PORT = 8080;
 
 app.use(express.json());
 app.use(session({
