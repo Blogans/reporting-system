@@ -4,7 +4,7 @@ function App() {
   const [message, setMessage] = useState('Loading...')
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/test')
+    fetch('https://https://incident-report-system-g4dtfwhwegdvc7ah.australiaeast-01.azurewebsites.net/api/test')
       .then(res => res.json())
       .then(data => setMessage(data.message))
       .catch(err => {
