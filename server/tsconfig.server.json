@@ -1,20 +1,25 @@
 {
-    "compilerOptions": {
-      "target": "ES2022",
-      "lib": ["ES2023"],
-      "module": "CommonJS",        // Changed from ESNext
-      "moduleResolution": "node",  // Changed from Bundler
-      "skipLibCheck": true,
-      "strict": true,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      "noFallthroughCasesInSwitch": true,
-      "noUncheckedSideEffectImports": true,
-      "outDir": "../dist/server",
-      "rootDir": ".",
-      "esModuleInterop": true,    // Added
-      "types": ["node"]
-    },
-    "include": ["./**/*"],
-    "exclude": ["../src"]
-  }
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023"],
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "strict": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "outDir": "../dist/server",
+    "rootDir": ".",
+    "esModuleInterop": true,
+    "types": ["node", "express-session"],
+    "declaration": true,
+    "baseUrl": ".",
+  },
+  "include": [
+    "./**/*",
+    "./types/**/*.d.ts"
+  ],
+  "exclude": ["../src"]
+}

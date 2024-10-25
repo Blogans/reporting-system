@@ -6,14 +6,17 @@ import session from 'express-session';
 import { connectToDatabase } from './utils/database';
 import venueRoutes from './routes/venue.route';
 import dashboardRoutes from './routes/dashboard.route';
+import authRoutes from './routes/auth.route';
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.use(cors({
-  credentials: true,
+  origin: 'http://localhost:5173', // or whatever your frontend URL is
+  credentials: true // needed for cookies/session
 }));
+
 app.use(express.json());
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
@@ -31,6 +34,13 @@ app.get('/api/test', (_req, res) => {
   res.json({ message: 'API is working!' });
 });
 
+/*app.get('/api/auth/register', (_req, res) => {
+  console.log('Test register hit');
+  res.json({ message: 'API is working!' });
+});
+*/
+
+app.use('/api/auth', authRoutes);
 app.use('/api/venues', venueRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 

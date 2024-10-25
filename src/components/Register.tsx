@@ -12,32 +12,37 @@ const Register: React.FC = () => {
 
   const navigate = useNavigate();
   const { setUser } = useAuth();
-
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
+      const response = await fetch('http://localhost:8080/api/auth/register', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, email, password, role }),
-        credentials: "include",
+        credentials: 'include', // needed for cookies/session
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+          role
+        })
       });
 
       if (!response.ok) {
-        console.log(response);
-        throw new Error("Registration failed");
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Registration failed');
       }
 
       const data = await response.json();
       setUser(data.user);
       navigate("/dashboard");
     } catch (err) {
-      console.log(err);
-      setError("Registration failed");
+      console.error('Registration error:', err);
+      setError(err instanceof Error ? err.message : 'Registration failed');
     }
   };
 
