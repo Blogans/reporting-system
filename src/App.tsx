@@ -21,8 +21,6 @@ import Reporting from "./components/reporting/Reporting";
 import BanManagement from "./components/ban/BanReporting";
 import WarningManagement from "./components/warning/WarningReporting";
 import IncidentReporting from "./components/incident/IncidentReporting.tsx";
-import { useAuth } from "./context/auth.context";
-import { usePermissions } from "./util/usePermissions";
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requiredPermission?: PermissionType;
@@ -30,22 +28,7 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
-  requiredPermission
 }) => {
-  const { user, isLoading } = useAuth();
-  const { hasPermission } = usePermissions();
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!user) {
-    return <Navigate to="/login" />;
-  }
-
-  if (requiredPermission && !hasPermission(requiredPermission)) {
-    return <Navigate to="/dashboard" />;
-  }
 
   return <>{children}</>;
 };
