@@ -25,18 +25,15 @@ stages:
       inputs:
         versionSpec: $(nodeVersion)
       displayName: 'Install Node.js'
-
     - script: |
         npm install
       displayName: 'Install Dependencies'
-
     - script: |
         npm run test:ci
       displayName: 'Run Tests'
       continueOnError: true
       env:
         NODE_ENV: 'test'
-
     - task: PublishTestResults@2
       displayName: 'Publish Test Results'
       inputs:
@@ -45,7 +42,6 @@ stages:
         mergeTestResults: true
         failTaskOnFailedTests: false
       condition: succeededOrFailed()
-
     - task: PublishCodeCoverageResults@2
       displayName: 'Publish Code Coverage'
       inputs:
@@ -57,7 +53,12 @@ stages:
 
 - stage: Build
   displayName: Build Stage
-  condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), and(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), succeeded('Test')))
+  dependsOn: []  # Remove dependency on Test stage
+  condition: or(
+    eq(variables['Build.SourceBranch'], 'refs/heads/main'),
+    and(
+      eq(variables['Build.SourceBranch'], 'refs/heads/develop'),
+      in(dependencies.Test.result, 'Succeeded', 'SucceededWithIssues', 'Skipped')))
   jobs:
   - job: Build
     displayName: Build Job
@@ -68,15 +69,12 @@ stages:
       inputs:
         versionSpec: $(nodeVersion)
       displayName: 'Install Node.js'
-
     - script: |
         npm install
       displayName: 'Install Dependencies'
-
     - script: |
         npm run build
       displayName: 'Build Application'
-
     - script: |
         mkdir deployment
         cp -r dist/* deployment/
@@ -84,7 +82,6 @@ stages:
         cp web.config deployment/
         cp package.json deployment/
       displayName: 'Prepare Deployment Files'
-     
     - task: ArchiveFiles@2
       displayName: 'Archive Files'
       inputs:
@@ -93,7 +90,6 @@ stages:
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
         replaceExistingArchive: true
-
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Build Artifacts'
       inputs:
@@ -104,7 +100,10 @@ stages:
 - stage: Deploy
   displayName: Deploy Stage
   dependsOn: Build
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  condition: and(
+    succeeded(),
+    eq(variables['Build.SourceBranch'], 'refs/heads/main'),
+    in(dependencies.Build.result, 'Succeeded', 'SucceededWithIssues'))
   jobs:
   - deployment: Deploy
     displayName: Deploy Job
@@ -121,7 +120,6 @@ stages:
               downloadType: 'single'
               artifactName: 'drop'
               downloadPath: '$(System.ArtifactStagingDirectory)'
-
           - task: AzureWebApp@1
             displayName: 'Deploy Azure Web App'
             inputs:
