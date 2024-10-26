@@ -4,8 +4,6 @@ import cors from 'cors';
 import path from 'path';
 import session from 'express-session';
 
-import databaseRoute from 'routes/database.route';
-
 dotenv.config();
 
 const app = express();
@@ -53,8 +51,6 @@ app.get('/', (_req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-app.use('/api/database', databaseRoute);
-
 app.get('/api/dashboard/stats', (_req, res) => {
   return res.json({
     totalIncidents: 42,
@@ -73,16 +69,16 @@ app.get('*', (_req, res) => {
 });
 
 // Start server
-async function startServer() {
+const startServer = () => {
   try {
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
     });
   } catch (error) {
-    console.error('Failed to start server:', error);
+    console.error('Error starting server:', error);
     process.exit(1);
   }
-}
+};
 
 startServer();
 
