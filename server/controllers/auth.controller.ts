@@ -83,6 +83,15 @@ export const logout = (req: Request, res: Response) => {
     if (err) {
       return res.status(500).json({ message: 'Could not log out, please try again' });
     }
+
+    res.clearCookie('connect.sid', {
+      path: '/',
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: false,
+      sameSite: 'none',
+      domain: process.env.NODE_ENV === 'production' ? 'incident-report-ebfsc5hthwd9g4a2.canadacentral-01.azurewebsites.net' : undefined
+    });
+
     res.json({ message: 'Logout successful' });
   });
 };
