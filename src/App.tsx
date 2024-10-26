@@ -6,7 +6,7 @@ const App = () => {
   const URL = 'https://incident-report-system-g4dtfwhwegdvc7ah.australiaeast-01.azurewebsites.net'
   
   useEffect(() => {
-    fetch(`${URL}/api/ping`)
+    fetch(`${URL}:8080/api/ping`)
       .then(res => res.json())
       .then(data => setResponse(data.message))
       .catch(_err => setResponse('Error connecting to server'));
