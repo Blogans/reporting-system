@@ -35,7 +35,7 @@ stages:
 
     - script: |
         mkdir deployment
-        cp -r dist deployment/
+        cp -r dist/* deployment/
         cp -r node_modules deployment/
         cp web.config deployment/
         cp package.json deployment/
