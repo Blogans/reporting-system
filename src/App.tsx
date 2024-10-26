@@ -3,8 +3,10 @@ import _React, { useEffect, useState } from 'react';
 const App = () => {
   const [response, setResponse] = useState('');
 
+  const URL = 'https://incident-report-system-g4dtfwhwegdvc7ah.australiaeast-01.azurewebsites.net/'
+  
   useEffect(() => {
-    fetch('http://localhost:8080/api/ping')
+    fetch(`${URL}/api/ping`)
       .then(res => res.json())
       .then(data => setResponse(data.message))
       .catch(_err => setResponse('Error connecting to server'));
