@@ -5,6 +5,7 @@ import path from 'path';
 import session from 'express-session';
 import connectDB from './utils/database';
 import databaseRoutes from './routes/database.route';
+import authRoutes from './routes/auth.route';
 
 dotenv.config();
 
@@ -57,6 +58,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/database', databaseRoutes);
 
 app.get('/api/dashboard/stats', (_req, res) => {
