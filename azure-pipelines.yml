@@ -53,12 +53,11 @@ stages:
 
 - stage: Build
   displayName: Build Stage
-  dependsOn: []  # Remove dependency on Test stage
   condition: or(
     eq(variables['Build.SourceBranch'], 'refs/heads/main'),
     and(
       eq(variables['Build.SourceBranch'], 'refs/heads/develop'),
-      in(dependencies.Test.result, 'Succeeded', 'SucceededWithIssues', 'Skipped')))
+      succeeded('Test')))  # Simplified condition
   jobs:
   - job: Build
     displayName: Build Job
