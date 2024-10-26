@@ -1,16 +1,10 @@
 import express from 'express';
 import path from 'path';
 import venueRoutes from './routes/venue.route';
-import cors from 'cors';
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-app.use(cors(
-{
-  origin: '*'
-}
-));
 app.use('/api/venues', venueRoutes);
 
 app.get('/api/test', (_req, res) => {
