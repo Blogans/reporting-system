@@ -3,11 +3,21 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import path from 'path';
 import session from 'express-session';
+import connectDB from './utils/database';
+
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+connectDB()
+  .then((result) => {
+    console.log('Database initialization result:', result);
+  })
+  .catch((error) => {
+    console.error('Failed to initialize database:', error);
+  });
 
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
