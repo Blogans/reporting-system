@@ -5,11 +5,11 @@ trigger:
     - develop
 
 variables:
-  azureSubscription: 'Your-Azure-Service-Connection'  # Replace with your service connection name
-  webAppName: 'your-webapp-name'                      # Replace with your web app name
+  azureSubscription: 'incident-report'  # Replace with your service connection name
+  webAppName: 'incident-report'                      # Replace with your web app name
   environmentName: 'production'                       # Environment name
   vmImageName: 'windows-latest'                      # Agent VM image name
-  nodeVersion: '18.x'                                # Node.js version
+  nodeVersion: '18.x'                                     # Node.js version
 
 stages:
 - stage: Build
