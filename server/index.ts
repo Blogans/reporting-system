@@ -1,11 +1,14 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import path from 'path';
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(express.static(path.join(__dirname, '../dist')));
 
 // Middleware
 const allowedOrigins = [
@@ -37,6 +40,10 @@ app.get('/', (_req: Request, res: Response) => {
 
 app.get('/api/ping', (_req: Request, res: Response) => {
   return res.json({ message: 'pong' });
+});
+
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
 // Start server
