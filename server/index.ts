@@ -6,6 +6,14 @@ import session from 'express-session';
 import connectDB from './utils/database';
 import databaseRoutes from './routes/database.route';
 import authRoutes from './routes/auth.route';
+import venueRoutes from './routes/venue.route';
+import contactRoutes from './routes/contact.route';
+import offenderRoutes from './routes/offender.route';
+import userRoutes from './routes/user.route';
+import incidentRoutes from './routes/incident.route';
+import warningsRoutes from './routes/warning.route';
+import bansRoutes from './routes/ban.route';
+import reportRoutes from './routes/report.route';
 
 dotenv.config();
 
@@ -62,6 +70,14 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/database', databaseRoutes);
+app.use('/api/venues', venueRoutes);
+app.use('/api/contacts', contactRoutes);
+app.use('/api/offenders', offenderRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/incidents', incidentRoutes);
+app.use('/api/warnings', warningsRoutes);
+app.use('/api/bans', bansRoutes);
+app.use('/api/reports', reportRoutes);
 
 app.get('/api/dashboard/stats', (_req, res) => {
   return res.json({
