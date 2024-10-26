@@ -32,11 +32,19 @@ stages:
     - script: |
         npm run build --if-present
       displayName: 'npm build'
+
+    - script: |
+        mkdir deployment
+        cp -r dist deployment/
+        cp -r node_modules deployment/
+        cp web.config deployment/
+        cp package.json deployment/
+      displayName: 'Prepare deployment files'
       
     - task: ArchiveFiles@2
       displayName: 'Archive files'
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/deployment'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
