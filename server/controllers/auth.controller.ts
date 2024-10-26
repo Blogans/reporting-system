@@ -65,8 +65,14 @@ export const login = async (req: Request, res: Response) => {
     req.session.userId = user._id.toString();
     req.session.userEmail = user.email;
     req.session.userRole = user.role;
-    
-    res.json({ message: 'Login successful', user: { id: user._id, email: user.email, role: user.role } });
+
+    req.session.save((err) => {
+      if (err) {
+        return res.status(500).json({ message: 'Could not log in, please try again' });
+      }
+      
+      res.json({ message: 'Login successful', user: { id: user._id, email: user.email, role: user.role } });
+    });
   } catch (error) {
     res.status(500).json({ message: 'Error logging in', error });
   }
