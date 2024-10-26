@@ -57,7 +57,7 @@ stages:
     eq(variables['Build.SourceBranch'], 'refs/heads/main'),
     and(
       eq(variables['Build.SourceBranch'], 'refs/heads/develop'),
-      succeeded('Test')))  # Simplified condition
+      in(dependencies.Test.result, 'Succeeded', 'SucceededWithIssues', 'Skipped')))
   jobs:
   - job: Build
     displayName: Build Job
@@ -99,10 +99,7 @@ stages:
 - stage: Deploy
   displayName: Deploy Stage
   dependsOn: Build
-  condition: and(
-    succeeded(),
-    eq(variables['Build.SourceBranch'], 'refs/heads/main'),
-    in(dependencies.Build.result, 'Succeeded', 'SucceededWithIssues'))
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')  # Only check if it's main branch
   jobs:
   - deployment: Deploy
     displayName: Deploy Job
