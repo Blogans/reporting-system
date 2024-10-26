@@ -24,13 +24,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const response = await fetch("/api/auth/check", {
         credentials: "include",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
       });
+
       if (response.ok) {
         const userData = await response.json();
         setUser(userData);
+      } else {
+        // Clear user if not authenticated
+        setUser(null);
       }
     } catch (error) {
       console.error("Error checking auth status:", error);
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
@@ -38,11 +47,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logout = async () => {
     try {
-      await fetch("/api/auth/logout", {
+      const response = await fetch("/api/auth/logout", {
         method: "POST",
         credentials: "include",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
       });
-      setUser(null);
+
+      if (response.ok) {
+        setUser(null);
+      } else {
+        console.error("Logout failed:", await response.text());
+      }
     } catch (error) {
       console.error("Error logging out:", error);
     }

@@ -20,11 +20,14 @@ connectDB()
     console.error('Failed to initialize database:', error);
   });
 
+app.set('trust proxy', 1)
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
   resave: false,
   saveUninitialized: false,
   cookie: {
+    httpOnly: true,
+    sameSite: 'none',
     secure: process.env.NODE_ENV === 'production',
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
   }
