@@ -4,7 +4,7 @@ import cors from 'cors';
 import path from 'path';
 import session from 'express-session';
 import connectDB from './utils/database';
-
+import databaseRoutes from './routes/database.route';
 
 dotenv.config();
 
@@ -57,9 +57,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.get('/', (_req: Request, res: Response) => {
-  res.send("Hello World!");
-});
+app.use('/api/database', databaseRoutes);
 
 app.get('/api/dashboard/stats', (_req, res) => {
   return res.json({
