@@ -19,10 +19,9 @@ stages:
         # Remove self-reference package before archiving
         rm -rf node_modules/report-project
       displayName: 'Prepare build'
-
     - task: ArchiveFiles@2
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        rootFolderOrFile: '$(Build.SourcesDirectory)'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
@@ -40,11 +39,12 @@ stages:
   - deployment: Deploy
     pool:
       vmImage: ubuntu-latest
-    environment: 'staging'
     strategy:
       runOnce:
         deploy:
           steps:
+          - download: current
+            artifact: drop
           - task: AzureWebApp@1
             inputs:
               azureSubscription: 'incident-report'
