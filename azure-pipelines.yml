@@ -9,7 +9,7 @@ variables:
   webAppName: 'incident-report'                      # Replace with your web app name
   environmentName: 'production'                       # Environment name
   vmImageName: 'windows-latest'                      # Agent VM image name
-  nodeVersion: '18.x'                                     # Node.js version
+  nodeVersion: '18.x'                                # Node.js version
 
 stages:
 - stage: Build
@@ -25,25 +25,18 @@ stages:
         versionSpec: $(nodeVersion)
       displayName: 'Install Node.js'
 
-    # Install all dependencies and build
     - script: |
         npm install
-        npm run build
-      displayName: 'Install dependencies and build'
+      displayName: 'npm install'
 
-    # Create a temporary folder for deployment
     - script: |
-        mkdir deployment
-        cp -r dist deployment/
-        cp -r node_modules deployment/
-        cp web.config deployment/
-        cp package.json deployment/
-      displayName: 'Prepare deployment files'
+        npm run build --if-present
+      displayName: 'npm build'
       
     - task: ArchiveFiles@2
       displayName: 'Archive files'
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/deployment'
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
@@ -82,6 +75,6 @@ stages:
             inputs:
               azureSubscription: $(azureSubscription)
               appName: $(webAppName)
-              package: '$(System.ArtifactStagingDirectory)/drop/$(Build.BuildId).zip'
+              package: '$(System.ArtifactsDirectory)/drop/$(Build.BuildId).zip'
               appType: 'webApp'
               deploymentMethod: 'auto'
