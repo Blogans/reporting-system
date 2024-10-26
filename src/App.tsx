@@ -8,7 +8,7 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import { AuthProvider, useAuth } from "./context/auth.context";
 import Login from "./components/Login";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/dashboard/Dashboard.tsx";
 import VenueList from "./components/venue/VenueList";
 import ContactList from "./components/contact/ContactList";
 import OffenderList from "./components/offender/OffenderList";

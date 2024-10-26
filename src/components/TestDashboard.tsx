@@ -46,7 +46,7 @@ const Dashboard: React.FC = () => {
       setLoading(true);
       setError(null);
 
-      fetch('/api/dashboard/stats')
+      fetch('/api/testdashboard/stats')
         .then(res => res.json())
         .then(data => setStats(data))
         .then(() => setLoading(false))

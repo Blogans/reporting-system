@@ -14,6 +14,7 @@ import incidentRoutes from './routes/incident.route';
 import warningsRoutes from './routes/warning.route';
 import bansRoutes from './routes/ban.route';
 import reportRoutes from './routes/report.route';
+import dashboardRoutes from './routes/dashboard.route';
 
 dotenv.config();
 
@@ -82,8 +83,9 @@ app.use('/api/incidents', incidentRoutes);
 app.use('/api/warnings', warningsRoutes);
 app.use('/api/bans', bansRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
-app.get('/api/dashboard/stats', (_req, res) => {
+app.get('/api/testdashboard/stats', (_req, res) => {
   return res.json({
     totalIncidents: 42,
     totalWarnings: 15,
