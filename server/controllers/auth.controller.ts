@@ -10,9 +10,46 @@ declare module 'express-session' {
   }
 }
 
+const validatePassword = (password: string): { isValid: boolean; message: string } => {
+  // Minimum length check
+  if (password.length < 8) {
+    return { isValid: false, message: 'Password must be at least 8 characters long' };
+  }
+
+  // Must contain at least one uppercase letter
+  if (!/[A-Z]/.test(password)) {
+    return { isValid: false, message: 'Password must contain at least one uppercase letter' };
+  }
+
+  // Must contain at least one lowercase letter
+  if (!/[a-z]/.test(password)) {
+    return { isValid: false, message: 'Password must contain at least one lowercase letter' };
+  }
+
+  // Must contain at least one number
+  if (!/\d/.test(password)) {
+    return { isValid: false, message: 'Password must contain at least one number' };
+  }
+
+  // Must contain at least one special character
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    return { isValid: false, message: 'Password must contain at least one special character' };
+  }
+
+  return { isValid: true, message: 'Password meets requirements' };
+};
+
 export const register = async (req: Request, res: Response) => {
   try {
     const { username, email, password, role } = req.body;
+    
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.isValid) {
+      return res.status(400).json({ 
+        message: 'Password requirements not met',
+        error: passwordValidation.message 
+      });
+    }
     
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {

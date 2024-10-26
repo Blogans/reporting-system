@@ -17,18 +17,22 @@ import reportRoutes from './routes/report.route';
 
 dotenv.config();
 
-const app = express();
+export const app = express();
 const port = process.env.PORT || 3000;
 
 app.set('trust proxy', 1)
 
-connectDB()
-  .then((result) => {
-    console.log('Database initialization result:', result);
-  })
-  .catch((error) => {
+// Database initialization
+export const initializeApp = async () => {
+  try {
+    const dbResult = await connectDB();
+    console.log('Database initialization result:', dbResult);
+    return dbResult;
+  } catch (error) {
     console.error('Failed to initialize database:', error);
-  });
+    throw error;
+  }
+};
 
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
@@ -97,17 +101,16 @@ app.get('*', (_req, res) => {
 });
 
 // Start server
-const startServer = () => {
-  try {
+if (process.env.NODE_ENV !== 'test') {
+  initializeApp().then(() => {
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
     });
-  } catch (error) {
-    console.error('Error starting server:', error);
+  }).catch((error) => {
+    console.error('Failed to start server:', error);
     process.exit(1);
-  }
-};
+  });
+}
 
-startServer();
 
 export default app;
