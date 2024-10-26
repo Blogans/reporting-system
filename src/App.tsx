@@ -4,7 +4,7 @@ const App = () => {
   const [response, setResponse] = useState('');
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/ping`)
+    fetch(`/api/ping`)
       .then(res => res.json())
       .then(data => setResponse(data.message))
       .catch(_err => setResponse('Error connecting to server'));
