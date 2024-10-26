@@ -1,65 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="19" failures="2" errors="0" time="8.703">
-  <testsuite name="Incident Reporting System Tests" errors="0" failures="2" skipped="0" timestamp="2024-10-26T12:21:33" time="8.573" tests="19">
-    <testcase classname="Incident Reporting System Tests Authentication should register a new user" name="Incident Reporting System Tests Authentication should register a new user" time="0.456">
+<testsuites name="jest tests" tests="19" failures="0" errors="0" time="9.091">
+  <testsuite name="Incident Reporting System Tests" errors="0" failures="0" skipped="0" timestamp="2024-10-26T12:58:23" time="8.957" tests="19">
+    <testcase classname="Incident Reporting System Tests Authentication should register a new user" name="Incident Reporting System Tests Authentication should register a new user" time="0.449">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Authentication should login an existing user" name="Incident Reporting System Tests Authentication should login an existing user" time="0.341">
+    <testcase classname="Incident Reporting System Tests Authentication should login an existing user" name="Incident Reporting System Tests Authentication should login an existing user" time="0.35">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Bans should create a new ban" name="Incident Reporting System Tests Bans should create a new ban" time="0.31">
+    <testcase classname="Incident Reporting System Tests Bans should create a new ban" name="Incident Reporting System Tests Bans should create a new ban" time="0.309">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Bans should get all bans" name="Incident Reporting System Tests Bans should get all bans" time="0.292">
+    <testcase classname="Incident Reporting System Tests Bans should get all bans" name="Incident Reporting System Tests Bans should get all bans" time="0.293">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Contacts should create a new contact" name="Incident Reporting System Tests Contacts should create a new contact" time="0.287">
+    <testcase classname="Incident Reporting System Tests Contacts should create a new contact" name="Incident Reporting System Tests Contacts should create a new contact" time="0.283">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Contacts should get all contacts" name="Incident Reporting System Tests Contacts should get all contacts" time="0.284">
+    <testcase classname="Incident Reporting System Tests Contacts should get all contacts" name="Incident Reporting System Tests Contacts should get all contacts" time="0.28">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Offenders should create a new offender" name="Incident Reporting System Tests Offenders should create a new offender" time="0.286">
+    <testcase classname="Incident Reporting System Tests Offenders should create a new offender" name="Incident Reporting System Tests Offenders should create a new offender" time="0.281">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Offenders should get all offenders" name="Incident Reporting System Tests Offenders should get all offenders" time="0.285">
+    <testcase classname="Incident Reporting System Tests Offenders should get all offenders" name="Incident Reporting System Tests Offenders should get all offenders" time="0.28">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Incidents should create a new incident" name="Incident Reporting System Tests Incidents should create a new incident" time="0.296">
+    <testcase classname="Incident Reporting System Tests Incidents should create a new incident" name="Incident Reporting System Tests Incidents should create a new incident" time="0.297">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Incidents should get all incidents" name="Incident Reporting System Tests Incidents should get all incidents" time="0.288">
+    <testcase classname="Incident Reporting System Tests Incidents should get all incidents" name="Incident Reporting System Tests Incidents should get all incidents" time="0.28">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Dashboard should retrieve accurate dashboard stats" name="Incident Reporting System Tests Dashboard should retrieve accurate dashboard stats" time="0.284">
-      <failure>Error: expect(received).toEqual(expected) // deep equality
-
-- Expected  - 4
-+ Received  + 4
-
-  Object {
--   &quot;totalBans&quot;: 1,
--   &quot;totalIncidents&quot;: 1,
--   &quot;totalVenues&quot;: 1,
--   &quot;totalWarnings&quot;: 1,
-+   &quot;totalBans&quot;: 7,
-+   &quot;totalIncidents&quot;: 42,
-+   &quot;totalVenues&quot;: 3,
-+   &quot;totalWarnings&quot;: 15,
-  }
-    at Object.&lt;anonymous&gt; (C:\Users\camse\Documents\reporting-system\tests\server\server.test.ts:178:29)
-    at processTicksAndRejections (node:internal/process/task_queues:95:5)</failure>
+    <testcase classname="Incident Reporting System Tests Dashboard should retrieve accurate dashboard stats" name="Incident Reporting System Tests Dashboard should retrieve accurate dashboard stats" time="0.29">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Dashboard should retrieve recent incidents and warnings" name="Incident Reporting System Tests Dashboard should retrieve recent incidents and warnings" time="0.287">
-      <failure>Error: expect(received).toBeTruthy()
-
-Received: false
-    at Object.&lt;anonymous&gt; (C:\Users\camse\Documents\reporting-system\tests\server\server.test.ts:192:53)
-    at processTicksAndRejections (node:internal/process/task_queues:95:5)</failure>
+    <testcase classname="Incident Reporting System Tests Dashboard should retrieve recent incidents and warnings" name="Incident Reporting System Tests Dashboard should retrieve recent incidents and warnings" time="0.3">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Warnings should create a new warning" name="Incident Reporting System Tests Warnings should create a new warning" time="0.302">
+    <testcase classname="Incident Reporting System Tests Warnings should create a new warning" name="Incident Reporting System Tests Warnings should create a new warning" time="0.298">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Warnings should get all warnings" name="Incident Reporting System Tests Warnings should get all warnings" time="0.293">
+    <testcase classname="Incident Reporting System Tests Warnings should get all warnings" name="Incident Reporting System Tests Warnings should get all warnings" time="0.291">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Admin User Management should get all users" name="Incident Reporting System Tests Admin User Management should get all users" time="0.288">
+    <testcase classname="Incident Reporting System Tests Admin User Management should get all users" name="Incident Reporting System Tests Admin User Management should get all users" time="0.287">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Admin User Management should create a new user" name="Incident Reporting System Tests Admin User Management should create a new user" time="0.34">
+    <testcase classname="Incident Reporting System Tests Admin User Management should create a new user" name="Incident Reporting System Tests Admin User Management should create a new user" time="0.36">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Admin User Management should edit a user" name="Incident Reporting System Tests Admin User Management should edit a user" time="0.306">
+    <testcase classname="Incident Reporting System Tests Admin User Management should edit a user" name="Incident Reporting System Tests Admin User Management should edit a user" time="0.302">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Venues should create a new venue" name="Incident Reporting System Tests Venues should create a new venue" time="0.294">
+    <testcase classname="Incident Reporting System Tests Venues should create a new venue" name="Incident Reporting System Tests Venues should create a new venue" time="0.286">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Venues should get all venues" name="Incident Reporting System Tests Venues should get all venues" time="0.308">
+    <testcase classname="Incident Reporting System Tests Venues should get all venues" name="Incident Reporting System Tests Venues should get all venues" time="0.281">
     </testcase>
   </testsuite>
 </testsuites>
