@@ -19,10 +19,10 @@ stages:
         # Remove self-reference package before archiving
         rm -rf node_modules/report-project
       displayName: 'Prepare build'
-      
+
     - task: ArchiveFiles@2
       inputs:
-        rootFolderOrFile: '$(Systme.DefaultWorkingDirectory)'
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
