@@ -5,8 +5,8 @@ trigger:
     - develop
 
 variables:
-  azureSubscription: 'incident-report'  # Replace with your service connection name
-  webAppName: 'incident-report'                      # Replace with your web app name
+  azureSubscription: 'Your-Azure-Service-Connection'  # Replace with your service connection name
+  webAppName: 'your-webapp-name'                      # Replace with your web app name
   environmentName: 'production'                       # Environment name
   vmImageName: 'windows-latest'                      # Agent VM image name
   nodeVersion: '18.x'                                # Node.js version
@@ -25,18 +25,25 @@ stages:
         versionSpec: $(nodeVersion)
       displayName: 'Install Node.js'
 
+    # Install all dependencies and build
     - script: |
         npm install
-      displayName: 'npm install'
+        npm run build
+      displayName: 'Install dependencies and build'
 
+    # Create a temporary folder for deployment
     - script: |
-        npm run build --if-present
-      displayName: 'npm build'
+        mkdir deployment
+        cp -r dist deployment/
+        cp -r node_modules deployment/
+        cp web.config deployment/
+        cp package.json deployment/
+      displayName: 'Prepare deployment files'
       
     - task: ArchiveFiles@2
       displayName: 'Archive files'
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/deployment'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
@@ -75,6 +82,6 @@ stages:
             inputs:
               azureSubscription: $(azureSubscription)
               appName: $(webAppName)
-              package: '$(System.ArtifactsDirectory)/drop/$(Build.BuildId).zip'
+              package: '$(System.ArtifactStagingDirectory)/drop/$(Build.BuildId).zip'
               appType: 'webApp'
               deploymentMethod: 'auto'
