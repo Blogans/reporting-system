@@ -3,7 +3,7 @@ import _React, { useEffect, useState } from 'react';
 const App = () => {
   const [response, setResponse] = useState('');
 
-  const URL = 'https://incident-report-system-g4dtfwhwegdvc7ah.australiaeast-01.azurewebsites.net/'
+  const URL = 'https://incident-report-system-g4dtfwhwegdvc7ah.australiaeast-01.azurewebsites.net'
   
   useEffect(() => {
     fetch(`${URL}/api/ping`)
