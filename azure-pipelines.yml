@@ -95,6 +95,6 @@ stages:
           - task: AzureWebApp@1
             inputs:
               azureSubscription: 'incident-reporting-system'
-              appName: 'incident-report'
+              appName: 'incident-report-system'
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
               deploymentMethod: 'zipDeploy'

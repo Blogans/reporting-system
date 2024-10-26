@@ -1,25 +1,18 @@
+// index.ts
 import express from 'express';
-import path from 'path';
+import cors from 'cors';
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const port = 8080;
+app.use(cors({
+  origin: '*',
+}));
 
 
-app.get('/api/test', (_req, res) => {
-  res.json({ message: 'Hello from server!' });
+app.get('/api/ping', (_req, res) => {
+  res.json({ message: 'pong' });
 });
 
-// Serve static files from root
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../')));
-  
-  app.get('*', (_req, res) => {
-    res.sendFile(path.join(__dirname, '../index.html'));
-  });
-}
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
-
-export default app;

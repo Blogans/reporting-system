@@ -1,19 +1,21 @@
-import { useState, useEffect } from 'react'
+import _React, { useEffect, useState } from 'react';
 
-function App() {
-  const [message, setMessage] = useState('Loading...')
+const App = () => {
+  const [response, setResponse] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/test/')
+    fetch('http://localhost:8080/api/ping')
       .then(res => res.json())
-      .then(data => setMessage(data.message))
-      .catch(err => {
-        console.error(err)
-        setMessage('Error connecting to server')
-      })
-  }, [])
+      .then(data => setResponse(data.message))
+      .catch(_err => setResponse('Error connecting to server'));
+  }, []);
 
-  return <div>{message}</div>
-}
+  return (
+    <div>
+      <h1>Hello World</h1>
+      <p>Server response: {response}</p>
+    </div>
+  );
+};
 
-export default App
+export default App;
