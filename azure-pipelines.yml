@@ -5,18 +5,19 @@ trigger:
     - develop
 
 variables:
-  azureSubscription: 'incident-report'  # Replace with your service connection name
-  webAppName: 'incident-report'                      # Replace with your web app name
-  environmentName: 'production'                       # Environment name
-  vmImageName: 'windows-latest'                      # Agent VM image name
-  nodeVersion: '18.x'                                # Node.js version
+  azureSubscription: 'incident-report'
+  webAppName: 'incident-report'
+  environmentName: 'production'
+  vmImageName: 'windows-latest'
+  nodeVersion: '18.x'
 
 stages:
-- stage: Build
-  displayName: Build stage
+- stage: Test
+  displayName: Test Stage
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
   jobs:
-  - job: Build
-    displayName: Build job
+  - job: Test
+    displayName: Run Tests
     pool:
       vmImage: $(vmImageName)
     steps:
@@ -27,11 +28,54 @@ stages:
 
     - script: |
         npm install
-      displayName: 'npm install'
+      displayName: 'Install Dependencies'
 
     - script: |
-        npm run build --if-present
-      displayName: 'npm build'
+        npm run test:ci
+      displayName: 'Run Tests'
+      continueOnError: true
+      env:
+        NODE_ENV: 'test'
+
+    - task: PublishTestResults@2
+      displayName: 'Publish Test Results'
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'junit.xml'
+        mergeTestResults: true
+        failTaskOnFailedTests: false
+      condition: succeededOrFailed()
+
+    - task: PublishCodeCoverageResults@2
+      displayName: 'Publish Code Coverage'
+      inputs:
+        codeCoverageTool: 'Cobertura'
+        summaryFileLocation: '$(Build.SourcesDirectory)/coverage/cobertura-coverage.xml'
+        pathToSources: '$(Build.SourcesDirectory)'
+        failIfCoverageEmpty: false
+      condition: succeededOrFailed()
+
+- stage: Build
+  displayName: Build Stage
+  condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), and(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), succeeded('Test')))
+  jobs:
+  - job: Build
+    displayName: Build Job
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: $(nodeVersion)
+      displayName: 'Install Node.js'
+
+    - script: |
+        npm install
+      displayName: 'Install Dependencies'
+
+    - script: |
+        npm run build
+      displayName: 'Build Application'
 
     - script: |
         mkdir deployment
@@ -39,10 +83,10 @@ stages:
         cp -r node_modules deployment/
         cp web.config deployment/
         cp package.json deployment/
-      displayName: 'Prepare deployment files'
-      
+      displayName: 'Prepare Deployment Files'
+     
     - task: ArchiveFiles@2
-      displayName: 'Archive files'
+      displayName: 'Archive Files'
       inputs:
         rootFolderOrFile: '$(System.DefaultWorkingDirectory)/deployment'
         includeRootFolder: false
@@ -51,19 +95,19 @@ stages:
         replaceExistingArchive: true
 
     - task: PublishBuildArtifacts@1
-      displayName: 'Publish artifacts'
+      displayName: 'Publish Build Artifacts'
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
         publishLocation: 'Container'
 
 - stage: Deploy
-  displayName: Deploy stage
+  displayName: Deploy Stage
   dependsOn: Build
-  condition: succeeded()
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
   jobs:
   - deployment: Deploy
-    displayName: Deploy job
+    displayName: Deploy Job
     environment: $(environmentName)
     pool:
       vmImage: $(vmImageName)
@@ -76,13 +120,13 @@ stages:
               buildType: 'current'
               downloadType: 'single'
               artifactName: 'drop'
-              downloadPath: '$(System.ArtifactsDirectory)'
+              downloadPath: '$(System.ArtifactStagingDirectory)'
 
           - task: AzureWebApp@1
             displayName: 'Deploy Azure Web App'
             inputs:
               azureSubscription: $(azureSubscription)
               appName: $(webAppName)
-              package: '$(System.ArtifactsDirectory)/drop/$(Build.BuildId).zip'
+              package: '$(System.ArtifactStagingDirectory)/drop/$(Build.BuildId).zip'
               appType: 'webApp'
               deploymentMethod: 'auto'

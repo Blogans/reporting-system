@@ -1,7 +1,11 @@
-export default {
-  preset: 'ts-jest/presets/default-esm',
+import type { Config } from '@jest/types';
+
+const config: Config.InitialOptions = {
+  testTimeout: 30000,  // Increase timeout to 30 seconds
+  forceExit: true,
+  detectOpenHandles: true,
+  preset: 'ts-jest',
   testEnvironment: 'node',
-  extensionsToTreatAsEsm: ['.ts'],
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
     '^server/(.*)$': '<rootDir>/server/$1',
@@ -9,7 +13,7 @@ export default {
   },
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {
-      useESM: true,
+      tsconfig: 'tests/tsconfig.test.json'
     }],
   },
   roots: ['<rootDir>/tests', '<rootDir>/server'],
@@ -25,3 +29,5 @@ export default {
   ],
   coverageReporters: ['cobertura'],
 };
+
+export default config;

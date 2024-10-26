@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noUnusedLocals": false,  // Turn this off for tests
+    "noUnusedParameters": false,  // Turn this off for tests
+    "types": ["node", "jest", "express-session"],
+    "baseUrl": "..",
+    "paths": {
+      "server/*": ["./server/*"],
+      "src/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "./**/*",
+    "../server/**/*"
+  ],
+  "exclude": ["node_modules"]
+}

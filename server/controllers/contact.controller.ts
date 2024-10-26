@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { ContactModel, VenueModel } from '../models';
 import { IContact } from '../models/index.js';
-import { getVenuesForUser } from './venue.controller.js';
+import { getVenuesForUser } from './venue.controller';
 
 async function getContactsForUser(userId: string): Promise<IContact[]> {
   const userVenues = await getVenuesForUser(userId);
