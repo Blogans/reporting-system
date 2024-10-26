@@ -1,42 +1,39 @@
 trigger:
   - dev
   - main
-
 stages:
 - stage: Build
   jobs:
   - job: BuildAndTest
     pool:
       vmImage: ubuntu-latest
-
     steps:
     - task: NodeTool@0
       inputs:
         versionSpec: "22.5.1"
       displayName: "Install Node.js"
-
     - script: |
         npm install
         npm run build
+        
+        # Remove self-reference package before archiving
+        rm -rf node_modules/report-project
       displayName: 'Prepare build'
-
+      
     - task: ArchiveFiles@2
       inputs:
-        rootFolderOrFile: '$(Build.SourcesDirectory)'
+        rootFolderOrFile: '$(Systme.DefaultWorkingDirectory)'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
         replaceExistingArchive: true
         verbose: true
       displayName: 'Archive files'
-
-
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
       displayName: 'Publish artifacts'
-
 - stage: Deploy
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
   jobs:
@@ -52,4 +49,5 @@ stages:
             inputs:
               azureSubscription: 'incident-report'
               appName: 'incident-report'
-              package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+              package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+              deploymentMethod: 'zipDeploy'
