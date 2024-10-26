@@ -2,11 +2,14 @@ import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import path from 'path';
+import session from 'express-session';
+import databaseRoute from './routes/database.route';
+import { connectToDatabase } from './utils/database';
 
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, '/')));
 
@@ -33,10 +36,24 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax'
+  }
+}));
+
 // Routes
 app.get('/', (_req: Request, res: Response) => {
   res.send("Hello World!");
 });
+
+app.use('/api/database', databaseRoute);
 
 app.get('/api/dashboard/stats', (_req, res) => {
   return res.json({
@@ -56,16 +73,17 @@ app.get('*', (_req, res) => {
 });
 
 // Start server
-const startServer = () => {
+async function startServer() {
   try {
-    app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
+    await connectToDatabase();
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
     });
   } catch (error) {
-    console.error('Error starting server:', error);
+    console.error('Failed to start server:', error);
     process.exit(1);
   }
-};
+}
 
 startServer();
 
