@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import path from 'path';
 import session from 'express-session';
-import { connectToDatabase } from 'utils/database';
 
 import databaseRoute from 'routes/database.route';
 
@@ -76,7 +75,6 @@ app.get('*', (_req, res) => {
 // Start server
 async function startServer() {
   try {
-    await connectToDatabase();
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
     });
