@@ -16,7 +16,7 @@ import UserList from "./components/user/UserList";
 import Register from "./components/Register";
 import Account from "./components/account/Account";
 import AppNavbar from "./components/shared/Navbar";
-import { PermissionType } from "./util/usePermissions";
+import { PermissionType, usePermissions } from "./util/usePermissions";
 import Reporting from "./components/reporting/Reporting";
 import BanManagement from "./components/ban/BanReporting";
 import WarningManagement from "./components/warning/WarningReporting";
@@ -27,8 +27,23 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
-  children
+  children,
+  requiredPermission
 }) => {
+  const { user, isLoading } = useAuth();
+  const { hasPermission } = usePermissions();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  if (requiredPermission && !hasPermission(requiredPermission)) {
+    return <Navigate to="/dashboard" />;
+  }
 
   return <>{children}</>;
 };
