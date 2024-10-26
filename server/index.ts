@@ -38,6 +38,15 @@ app.get('/', (_req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
+app.get('/api/dashboard/stats', (_req, res) => {
+  return res.json({
+    totalIncidents: 42,
+    totalWarnings: 15,
+    totalBans: 7,
+    totalVenues: 3,
+  });
+});
+
 app.get('/api/ping', (_req: Request, res: Response) => {
   return res.json({ message: 'pong' });
 });
