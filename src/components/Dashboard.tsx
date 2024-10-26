@@ -26,12 +26,7 @@ const Dashboard: React.FC = () => {
       setLoading(true);
       setError(null);
 
-      fetch('/api/database/db', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
+      fetch('/api/database/db')
         .then(res => res.json())
         .then(data => setDbStatus(data))
         .then(() => setLoading(false))
