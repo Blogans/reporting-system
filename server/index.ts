@@ -1,11 +1,9 @@
 import express from 'express';
 import path from 'path';
-import venueRoutes from './routes/venue.route';
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-app.use('/api/venues', venueRoutes);
 
 app.get('/api/test', (_req, res) => {
   res.json({ message: 'Hello from server!' });
