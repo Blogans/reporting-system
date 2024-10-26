@@ -4,7 +4,7 @@ const App = () => {
   const [response, setResponse] = useState('');
 
   useEffect(() => {
-    fetch(`https://incident-report-system-g4dtfwhwegdvc7ah.australiaeast-01.azurewebsites.net/api/ping`)
+    fetch(`http://localhost:8080/api/ping`)
       .then(res => res.json())
       .then(data => setResponse(data.message))
       .catch(_err => setResponse('Error connecting to server'));
