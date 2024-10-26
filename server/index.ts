@@ -12,6 +12,8 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.set('trust proxy', 1)
+
 connectDB()
   .then((result) => {
     console.log('Database initialization result:', result);
@@ -20,7 +22,6 @@ connectDB()
     console.error('Failed to initialize database:', error);
   });
 
-app.set('trust proxy', 1)
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
   resave: false,
@@ -29,8 +30,8 @@ app.use(session({
     httpOnly: false,
     secure: process.env.NODE_ENV === 'production',
     maxAge: 24 * 60 * 60 * 1000, // 24 hours,
-    domain: process.env.NODE_ENV === 'production' ? '.azurewebsites.net' : 'localhost',
-  }
+    sameSite: 'none',
+    domain: process.env.NODE_ENV === 'production' ? 'incident-report-ebfsc5hthwd9g4a2.canadacentral-01.azurewebsites.net' : 'localhost'  }
 }));
 
 app.use(express.static(path.join(__dirname, '/')));
