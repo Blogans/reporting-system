@@ -1,40 +1,146 @@
-import _React, { useEffect, useState } from 'react';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { AuthProvider, useAuth } from "./context/auth.context";
+import Login from "./components/Login";
+import Dashboard from "./components/Dashboard";
+import VenueList from "./components/venue/VenueList";
+import ContactList from "./components/contact/ContactList";
+import OffenderList from "./components/offender/OffenderList";
+import UserList from "./components/user/UserList";
+import Register from "./components/Register";
+import Account from "./components/account/Account";
+import AppNavbar from "./components/shared/Navbar";
+import { PermissionType } from "./util/usePermissions";
+import Reporting from "./components/reporting/Reporting";
+import BanManagement from "./components/ban/BanReporting";
+import WarningManagement from "./components/warning/WarningReporting";
+import IncidentReporting from "./components/incident/IncidentReporting.tsx";
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  requiredPermission?: PermissionType;
+}
 
-const App = () => {
-  const [response, setResponse] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children
+}) => {
 
-  useEffect(() => {
-    setIsLoading(true);
-    fetch(`/api/ping`)  // Remove http://localhost:3000 to make it relative
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then(data => {
-        setResponse(data.message);
-        setError('');
-      })
-      .catch(err => {
-        console.error('Error:', err);
-        setError('Error connecting to server');
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
+  return <>{children}</>;
+};
+
+function AppContent() {
+  const { isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div>
-      <h1>Hello World</h1>
-      {isLoading && <p>Loading...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {!isLoading && !error && <p>Server response: {response}</p>}
-    </div>
+    <Router>
+      <AppNavbar />
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/venues"
+          element={
+            <ProtectedRoute requiredPermission="VIEW_VENUES">
+              <VenueList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/contacts"
+          element={
+            <ProtectedRoute requiredPermission="VIEW_CONTACTS">
+              <ContactList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/offenders"
+          element={
+            <ProtectedRoute requiredPermission="MANAGE_OFFENDERS">
+              <OffenderList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute requiredPermission="MANAGE_USERS">
+              <UserList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/incidents"
+          element={
+            <ProtectedRoute requiredPermission="VIEW_INCIDENTS">
+              <IncidentReporting />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/warnings"
+          element={
+            <ProtectedRoute requiredPermission="VIEW_WARNINGS">
+              <WarningManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/bans"
+          element={
+            <ProtectedRoute requiredPermission="VIEW_BANS">
+              <BanManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/register" 
+        element={
+        <Register />} 
+        />
+        <Route
+          path="/account"
+          element={
+            <ProtectedRoute>
+              <Account />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reporting"
+          element={
+            <ProtectedRoute>
+              <Reporting />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/dashboard" />} />
+      </Routes>
+    </Router>
   );
-};
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
+}
 
 export default App;
