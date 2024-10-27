@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="19" failures="0" errors="0" time="9.091">
-  <testsuite name="Incident Reporting System Tests" errors="0" failures="0" skipped="0" timestamp="2024-10-26T12:58:23" time="8.957" tests="19">
-    <testcase classname="Incident Reporting System Tests Authentication should register a new user" name="Incident Reporting System Tests Authentication should register a new user" time="0.449">
+<testsuites name="jest tests" tests="19" failures="0" errors="0" time="9.458">
+  <testsuite name="Incident Reporting System Tests" errors="0" failures="0" skipped="0" timestamp="2024-10-27T11:48:06" time="9.418" tests="19">
+    <testcase classname="Incident Reporting System Tests Authentication should register a new user" name="Incident Reporting System Tests Authentication should register a new user" time="0.464">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Authentication should login an existing user" name="Incident Reporting System Tests Authentication should login an existing user" time="0.35">
+    <testcase classname="Incident Reporting System Tests Authentication should login an existing user" name="Incident Reporting System Tests Authentication should login an existing user" time="0.323">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Bans should create a new ban" name="Incident Reporting System Tests Bans should create a new ban" time="0.309">
+    <testcase classname="Incident Reporting System Tests Bans should create a new ban" name="Incident Reporting System Tests Bans should create a new ban" time="0.29">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Bans should get all bans" name="Incident Reporting System Tests Bans should get all bans" time="0.293">
+    <testcase classname="Incident Reporting System Tests Bans should get all bans" name="Incident Reporting System Tests Bans should get all bans" time="0.274">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Contacts should create a new contact" name="Incident Reporting System Tests Contacts should create a new contact" time="0.283">
+    <testcase classname="Incident Reporting System Tests Contacts should create a new contact" name="Incident Reporting System Tests Contacts should create a new contact" time="0.271">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Contacts should get all contacts" name="Incident Reporting System Tests Contacts should get all contacts" time="0.28">
+    <testcase classname="Incident Reporting System Tests Contacts should get all contacts" name="Incident Reporting System Tests Contacts should get all contacts" time="0.268">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Offenders should create a new offender" name="Incident Reporting System Tests Offenders should create a new offender" time="0.281">
+    <testcase classname="Incident Reporting System Tests Offenders should create a new offender" name="Incident Reporting System Tests Offenders should create a new offender" time="0.284">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Offenders should get all offenders" name="Incident Reporting System Tests Offenders should get all offenders" time="0.28">
+    <testcase classname="Incident Reporting System Tests Offenders should get all offenders" name="Incident Reporting System Tests Offenders should get all offenders" time="0.274">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Incidents should create a new incident" name="Incident Reporting System Tests Incidents should create a new incident" time="0.297">
+    <testcase classname="Incident Reporting System Tests Incidents should create a new incident" name="Incident Reporting System Tests Incidents should create a new incident" time="0.273">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Incidents should get all incidents" name="Incident Reporting System Tests Incidents should get all incidents" time="0.28">
+    <testcase classname="Incident Reporting System Tests Incidents should get all incidents" name="Incident Reporting System Tests Incidents should get all incidents" time="0.266">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Dashboard should retrieve accurate dashboard stats" name="Incident Reporting System Tests Dashboard should retrieve accurate dashboard stats" time="0.29">
+    <testcase classname="Incident Reporting System Tests Dashboard should retrieve accurate dashboard stats" name="Incident Reporting System Tests Dashboard should retrieve accurate dashboard stats" time="0.276">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Dashboard should retrieve recent incidents and warnings" name="Incident Reporting System Tests Dashboard should retrieve recent incidents and warnings" time="0.3">
+    <testcase classname="Incident Reporting System Tests Dashboard should retrieve recent incidents and warnings" name="Incident Reporting System Tests Dashboard should retrieve recent incidents and warnings" time="0.276">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Warnings should create a new warning" name="Incident Reporting System Tests Warnings should create a new warning" time="0.298">
+    <testcase classname="Incident Reporting System Tests Warnings should create a new warning" name="Incident Reporting System Tests Warnings should create a new warning" time="0.276">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Warnings should get all warnings" name="Incident Reporting System Tests Warnings should get all warnings" time="0.291">
+    <testcase classname="Incident Reporting System Tests Warnings should get all warnings" name="Incident Reporting System Tests Warnings should get all warnings" time="0.269">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Admin User Management should get all users" name="Incident Reporting System Tests Admin User Management should get all users" time="0.287">
+    <testcase classname="Incident Reporting System Tests Admin User Management should get all users" name="Incident Reporting System Tests Admin User Management should get all users" time="0.267">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Admin User Management should create a new user" name="Incident Reporting System Tests Admin User Management should create a new user" time="0.36">
+    <testcase classname="Incident Reporting System Tests Admin User Management should create a new user" name="Incident Reporting System Tests Admin User Management should create a new user" time="0.324">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Admin User Management should edit a user" name="Incident Reporting System Tests Admin User Management should edit a user" time="0.302">
+    <testcase classname="Incident Reporting System Tests Admin User Management should edit a user" name="Incident Reporting System Tests Admin User Management should edit a user" time="0.271">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Venues should create a new venue" name="Incident Reporting System Tests Venues should create a new venue" time="0.286">
+    <testcase classname="Incident Reporting System Tests Venues should create a new venue" name="Incident Reporting System Tests Venues should create a new venue" time="0.269">
     </testcase>
-    <testcase classname="Incident Reporting System Tests Venues should get all venues" name="Incident Reporting System Tests Venues should get all venues" time="0.281">
+    <testcase classname="Incident Reporting System Tests Venues should get all venues" name="Incident Reporting System Tests Venues should get all venues" time="0.264">
     </testcase>
   </testsuite>
 </testsuites>
