@@ -1,37 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/auth.context";
-
-interface PasswordRequirement {
-  message: string;
-  isMet: boolean;
-}
-
-const validatePassword = (password: string): PasswordRequirement[] => {
-  return [
-    {
-      message: 'At least 8 characters long',
-      isMet: password.length >= 8
-    },
-    {
-      message: 'Contains an uppercase letter',
-      isMet: /[A-Z]/.test(password)
-    },
-    {
-      message: 'Contains a lowercase letter',
-      isMet: /[a-z]/.test(password)
-    },
-    {
-      message: 'Contains a number',
-      isMet: /\d/.test(password)
-    },
-    {
-      message: 'Contains a special character',
-      isMet: /[!@#$%^&*(),.?":{}|<>]/.test(password)
-    }
-  ];
-};
 
 const Register: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -39,25 +9,12 @@ const Register: React.FC = () => {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("staff");
   const [error, setError] = useState("");
-  const [passwordRequirements, setPasswordRequirements] = useState<PasswordRequirement[]>([]);
-  const [isPasswordValid, setIsPasswordValid] = useState(false);
   const navigate = useNavigate();
   const { setUser } = useAuth();
-
-  useEffect(() => {
-    const requirements = validatePassword(password);
-    setPasswordRequirements(requirements);
-    setIsPasswordValid(requirements.every(req => req.isMet));
-  }, [password]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-
-    if (!isPasswordValid) {
-      setError("Please meet all password requirements");
-      return;
-    }
 
     try {
       const response = await fetch("/api/auth/register", {
@@ -120,23 +77,7 @@ const Register: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                isValid={password.length > 0 && isPasswordValid}
-                isInvalid={password.length > 0 && !isPasswordValid}
               />
-              <div className="mt-2">
-                {passwordRequirements.map((req, index) => (
-                  <div 
-                    key={index} 
-                    className="small"
-                    style={{ 
-                      color: req.isMet ? '#198754' : '#dc3545',
-                      marginBottom: '0.25rem'
-                    }}
-                  >
-                    {req.isMet ? '✓' : '○'} {req.message}
-                  </div>
-                ))}
-              </div>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicRole">
@@ -148,15 +89,13 @@ const Register: React.FC = () => {
                 required
               >
                 <option value="staff">Staff</option>
-                <option value="manager">Manager</option>
-                <option value="admin">Admin</option>
               </Form.Control>
             </Form.Group>
 
             <Button 
               variant="primary" 
               type="submit"
-              disabled={!isPasswordValid || !username || !email}
+              disabled={!username || !email}
             >
               Register
             </Button>

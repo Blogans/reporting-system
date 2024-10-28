@@ -5,6 +5,7 @@
   "scripts": {
     "dev:client": "vite",
     "dev:server": "nodemon --watch server/**/*.ts --exec \"ts-node -P server/tsconfig.server.json\" server/index.ts",
+    "local": "concurrently \"npm run preview\" \"npm run start\"",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "build": "npm run build:client && npm run build:server",
     "build:client": "tsc -b && vite build --outDir dist/",
