@@ -8,7 +8,7 @@ export const checkPermission = (permission: keyof typeof PERMISSIONS) => {
       console.log(`User has permission: ${permission}`);
       next();
     } else {
-      console.log(`User does not have permission: ${permission}`);
+      console.log(`User role ${userRole} does not have permission: ${permission}`);
       res.status(403).json({ message: 'Access denied. Insufficient permissions.', errorCode: 'PERMISSION_DENIED' });
     }
   };

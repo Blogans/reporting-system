@@ -1,9 +1,11 @@
 {
+  "compilerOptions": {
+    "composite": true
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" },
-    { "path": "./server/tsconfig.server.json" },
-    { "path": "./tests/tsconfig.test.json" }
+    { "path": "./server/tsconfig.server.json" }
   ]
 }

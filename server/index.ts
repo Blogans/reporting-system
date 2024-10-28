@@ -43,7 +43,7 @@ app.use(session({
     httpOnly: false,
     secure: process.env.NODE_ENV === 'production',
     maxAge: 24 * 60 * 60 * 1000, // 24 hours,
-    sameSite: 'none',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     domain: process.env.NODE_ENV === 'production' ? 'incident-report-ebfsc5hthwd9g4a2.canadacentral-01.azurewebsites.net' : 'localhost'  }
 }));
 
