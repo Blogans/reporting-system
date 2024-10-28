@@ -15,11 +15,16 @@
     "esModuleInterop": true,
     "types": ["node", "express-session"],
     "declaration": true,
-    "baseUrl": ".",
+    "composite": true,      // Add this for project references
+    "sourceMap": true,      // Add source maps
+    "baseUrl": "."
   },
   "include": [
-    "./**/*",
-    "./types/**/*.d.ts"
+    "./**/*.ts"            // Be specific about TypeScript files
   ],
-  "exclude": ["../src"]
+  "exclude": [
+    "../src",
+    "../dist",
+    "**/*.js"
+  ]
 }

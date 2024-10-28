@@ -2,6 +2,13 @@ import { Request, Response } from 'express';
 import { BanModel, UserModel, IncidentModel, WarningModel } from '../models';
 import { IBan } from '../models/index.js';
 
+declare module 'express-session' {
+  interface SessionData {
+    userId?: string;
+    userEmail?: string;
+    userRole?: string;
+  }
+}
 
 export async function getBansForUser(userId: string) {
   const user = await UserModel.findById(userId);

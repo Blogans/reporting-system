@@ -108,6 +108,7 @@ export const login = async (req: Request, res: Response) => {
         return res.status(500).json({ message: 'Could not log in, please try again' });
       }
       
+      console.log('Session saved:', req.session);
       res.json({ message: 'Login successful', user: { id: user._id, email: user.email, role: user.role } });
     });
   } catch (error) {
